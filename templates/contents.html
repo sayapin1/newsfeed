@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+    <title>Title</title>
+</head>
+
+<style>
+    .wrap3 {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .category {
+        width: 15%;
+
+        border: 2px solid gray;
+        padding: 30px;
+    }
+
+    .content {
+        border: 2px solid gray;
+        padding: 30px;
+
+        width: 900px;
+    }
+
+    .showcontent {
+        border: 2px solid gray;
+        padding: 30px;
+        height: 400px;
+    }
+
+    .buttonplace {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px
+    }
+
+    .previouspage {
+        margin-right: auto;
+        border-radius: 10px;
+        border: none
+    }
+
+    .nextpage {
+        margin-left: auto;
+        border-radius: 10px;
+        border: none
+    }
+
+</style>
+
+<body>
+<div class="wrap3">
+    <div class="category">Category<br>
+        <br>
+        <ul class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action">
+                TIL
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">WIL</a>
+            <a href="#" class="list-group-item list-group-item-action">잡담</a>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="showcontent">게시글이 보입니다.<br>border는 싹 지울 예정입니다. </div>
+        <div class="buttonplace">
+            <button class="previouspage" onclick="location.href='#';">이전 게시글</button>
+            <button style="margin-right: 20px; border-radius: 10px; border: none">삭제</button>
+            <button style="border-radius: 10px; border: none">수정</button>
+            <button class="nextpage" onclick="location.href='#';">다음 게시글</button>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+
