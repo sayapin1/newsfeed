@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13_LOG LOGIN</title>
     <link rel="stylesheet" href="../static/Login_Styles.css">
-    <script src="../놀이터/jquery-1.12.4.js"> </script>
+    <script src="../static/jquery-1.12.4.js"> </script>
     
 </head>
 <body>
     <section class="login-form">
-        <h1><a href="">13_LOG </a></h1>
+        <h1><a href=""><img src="../static/logo.png"></a></h1>
         <form action="">
             <div class="int-area">
                 <input type="email" name="email" id="signinEmail"
@@ -59,14 +59,14 @@
                 const auth = getAuth();
                 signInWithEmailAndPassword(auth, signinEmail, signinPassword)
                 .then((userCredential) => {
-                    alert('로그인성공')
+                    alert('어서오세요')
                     
                     // Signed in 
                     const user = userCredential.user;
                     // ...
                 })
                 .catch((error) => {
-                    alert('아이디또는 비밀번호를 확인해주세요')
+                    alert('아이디 또는 비밀번호를 확인해주세요')
                     
                     const errorCode = error.code;
                     const errorMessage = error.message;
@@ -79,7 +79,7 @@
             
         </script>
         <div class="caption">
-            Not registerd? <a href=""> Creat an account </a>
+            Not registerd? <a href="../templates/account.html"> Creat an account </a>
         </div>
     </section>
 
