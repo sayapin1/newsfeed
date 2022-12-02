@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13_LOG Creat</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="../놀이터/jquery-1.12.4.js"> </script>
+    
+</head>
+<body>
+    <section class="login-form">
+        <h1><a href="">13_LOG </a></h1>
+        <form action="">
+            <div class="int-area">
+                <input type="email" name="signupEmail" id="signupEmail"
+                autocomplete="off"required>
+                <label for="id">E-mail</label>
+            </div>
+            <div class="int-area">
+                <input type="password" name="signupPw" id="signupPw"
+                autocomplete="off"required>
+                <label for="id">PASSWORD</label>
+            </div>
+           
+            <div class="btn-area">
+                <button id ='btn'
+                 type="submit">Creat</button>
+            </div>
+        </form>
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+              apiKey: "AIzaSyCTQW6LFGttGzDiXVQxGCjiMev8T0Wrtu0",
+              authDomain: "log-85ad1.firebaseapp.com",
+              projectId: "log-85ad1",
+              storageBucket: "log-85ad1.appspot.com",
+              messagingSenderId: "765579630118",
+              appId: "1:765579630118:web:b4ba8d84ae670a7b7e78e7",
+              measurementId: "G-JYXSVF7C8R"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+
+            import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+            document.getElementById('btn').addEventListener('click',(event) => {
+                event.preventDefault()
+                const email = document.getElementById('signupEmail').value
+                const password = document.getElementById('signupPw').value
+                const auth = getAuth();
+                createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log(userCredential)
+                    // Signed in 
+                    const user = userCredential.user;
+                    // ...
+                })
+                .catch((error) => {
+                    console.log('errer')
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // ..
+                });
+                                    
+            })
+
+            
+            
+        </script>
+        <div class="caption">
+            already have account? <a href=""> Go to Login </a>
+        </div>
+        
+    </section>
+
+    <script>
+        let id = $('#id');
+        let pw = $('#pw');
+        let btn = $('#btn');
+
+        $(btn).on('click', function() {
+            if ($(id).val() == ""){
+                 $(id).next('label').addClass('warning');
+                 setTimeout(function(){
+                    $('label').removeClass('warning');
+                 },1500);
+            }
+            else if ($(pw).val() == ""){
+                $(pw).next('label').addClass('warning');
+            }
+        });
+
+    </script>
+    
+</body>
+</html>
