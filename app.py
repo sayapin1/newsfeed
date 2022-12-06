@@ -23,9 +23,7 @@ def home():
 def createpage():
     return render_template('write.html')
 
-@app.route("/post?id={id}/update", methods=["GET"])
-def updatepage():
-    return render_template('update.html')
+
 
 
 @app.route("/post/get", methods=["GET"])
@@ -71,17 +69,20 @@ def create_post():
     db.commit()
 
     return jsonify({'msg':'등록완료!'})
-    return render_template('index.html')
 
+@app.route("/post/update/<id>", methods=["GET"])
+def updatepage(id):
+    return render_template('update.html')
 
 @app.route("/post/up/<id>", methods=["POST"])
-def post_up():
-    id = request.form['id_give']
+def post_up(id):
+    # post_id = request.form['id_give']
     title = request.form['title_give']
     content = request.form['content_give']
     category_name = request.form['cat_name_give']
 
-    sql = """update post set title = '%s', content = '%s', category_name = '%s'  where id ='%s'""" %(title, content, category_name, id)
+    # sql = """update post set title = '%s', content = '%s', category_name = '%s'  where id ='%s'""" %(title, content, category_name, id)
+    sql =
     curs.execute(sql)
     curs.fetchall()
     db.commit()

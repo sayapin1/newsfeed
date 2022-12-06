@@ -100,12 +100,12 @@
         let category_name = $('#category_name').val();
         $.ajax({
             type: "POST",
-            url: '/post/up/<id>',
+            url: `/post/up/${id}`,
             data: {
                 title_give: title,
                 content_give: content,
-                cat_name_give: category_name,
-                id_give: id
+                cat_name_give: category_name
+                // id_give: `${id}`
             },
             success: function (response) {
                 alert(response['msg'])
