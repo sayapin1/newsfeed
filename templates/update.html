@@ -76,31 +76,40 @@
     }
 </style>
 <script>
-    function join() {
-        alert('저장 완료');
+    function updatenow() {
+        function getUrlParams() {
+            let params = {};
+
+            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+                function (str, key, value) {
+                    params[key] = value;
+                }
+            );
+            return params;
+        }
+
+        const params = getUrlParams();
+        const id = params.id;
+
+        up_post(id)
     }
 
-    function create_post() {
-        let name = $('#name').val();
-        let user_id = $('#id').val();
-        let user_pw = $('#pw').val();
+    function up_post(id) {
         let title = $('#title').val();
         let content = $('#content').val();
         let category_name = $('#category_name').val();
         $.ajax({
             type: "POST",
-            url: "/post/create",
+            url: '/post/up/<id>',
             data: {
-                name_give: name,
-                user_id_give: user_id,
-                user_pw_give: user_pw,
                 title_give: title,
                 content_give: content,
-                cat_name_give: category_name
+                cat_name_give: category_name,
+                id_give: id
             },
             success: function (response) {
                 alert(response['msg'])
-                window.location.href='/'
+                window.location.href = '/'
             }
         })
     }
@@ -148,7 +157,7 @@
     </div>
 </header>
 <div class="wrap">
-    <h1> 글 작성 하기</h1>
+    <h1> 글 수정 하기</h1>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <label class="input-group-text" for="category_name">Category</label>
@@ -158,11 +167,6 @@
             <option value="WIL">WIL</option>
             <option value="잡담">잡담</option>
         </select>
-        <div class="writeyourinfo">
-            <input type="text" id="name" placeholder="이름을 입력해주세요">
-            <input type="text" id="id" placeholder="id를 입력해주세요">
-            <input type="text" id="pw" placeholder="pw를 입력해주세요">
-        </div>
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -176,7 +180,7 @@
         </div>
         <textarea class="form-control" aria-label="With textarea" id="content"></textarea>
     </div>
-    <button type="button" onclick="create_post()" class="btn btn-primary btn-join">저장</button>
+    <button type="button" onclick="updatenow()" class="btn btn-primary btn-join">저장</button>
 </div>
 </body>
 
