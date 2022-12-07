@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:padding-top="http://www.w3.org/1999/xhtml" xmlns:padding-left="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,6 +101,10 @@
         display: flex;
     }
 
+    .showpost{
+        border: 2px solid gray;
+    }
+
 </style>
 
 <body>
@@ -134,10 +138,11 @@
                     let category = rows[i]['category'];
                     let name = rows[i]['name'];
 
-                    let temp_html = `<div class="ontop">
+                    let temp_html = `<button onclick="location.href='post/${s}'">게시글 보기</button>
+                                     <div class="ontop">
                                         <h1>${title}</h1>
                                         <div style="padding-top: 30px; padding-left: 50px">${category}</div>
-                                        <button onclick="window.location.href='post/create'" style="padding-top: 30px; padding-left: 50px">게시글 작성</button>
+                                        <button onclick="location.href='post/create'" style="padding-top: 30px; padding-left: 50px">게시글 작성</button>
                                     </div>
                                     <div class="post_info">
                                         <h5 style="font-weight: bold">${name}</h5>
@@ -158,55 +163,55 @@
         })
     }
 
-    function create_post() {
-        let name = $('#name').val();
-        let user_id = $('#id').val();
-        let user_pw = $('#pw').val();
-        let title = $('#title').val();
-        let content = $('#content').val();
-        let category_name = $('#category_name').val();
-        $.ajax({
-            type: "POST",
-            url: "/post/create/<id>",
-            data: {
-                name_give: name,
-                user_id_give: user_id,
-                user_pw_give: user_pw,
-                title_give: title,
-                content_give: content,
-                cat_name_give: category_name
-            },
-            success: function (response) {
-                alert(response['msg'])
-                window.location.reload()
-            }
-        })
-    }
+    // function create_post() {
+    //     let name = $('#name').val();
+    //     let user_id = $('#id').val();
+    //     let user_pw = $('#pw').val();
+    //     let title = $('#title').val();
+    //     let content = $('#content').val();
+    //     let category_name = $('#category_name').val();
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/post/create/<id>",
+    //         data: {
+    //             name_give: name,
+    //             user_id_give: user_id,
+    //             user_pw_give: user_pw,
+    //             title_give: title,
+    //             content_give: content,
+    //             cat_name_give: category_name
+    //         },
+    //         success: function (response) {
+    //             alert(response['msg'])
+    //             window.location.reload()
+    //         }
+    //     })
+    // }
 
-    function up_post(up) {
-        let name = $('#name').val();
-        let id = $('#id').val();
-        let pw = $('#pw').val();
-        let title = $('#title').val();
-        let content = $('#content').val();
-        let category_name = $('#category_name').val();
-
-        $.ajax({
-            type: "POST",
-            url: "/post/up",
-            data: {name_give: name,
-            user_id_give: id,
-            user_pw_give: pw,
-            title_give: title,
-            content_give: content,
-            cat_name_give: category_name,
-            id_give:up},
-            success: function (response) {
-            alert(response['msg'])
-            window.location.reload()
-            }
-        })
-    }
+    // function up_post(up) {
+    //     let name = $('#name').val();
+    //     let id = $('#id').val();
+    //     let pw = $('#pw').val();
+    //     let title = $('#title').val();
+    //     let content = $('#content').val();
+    //     let category_name = $('#category_name').val();
+    //
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/post/up",
+    //         data: {name_give: name,
+    //         user_id_give: id,
+    //         user_pw_give: pw,
+    //         title_give: title,
+    //         content_give: content,
+    //         cat_name_give: category_name,
+    //         id_give:up},
+    //         success: function (response) {
+    //         alert(response['msg'])
+    //         window.location.reload()
+    //         }
+    //     })
+    // }
 
 
     function del_post(del) {
@@ -266,19 +271,18 @@
     <div class="category">Category<br>
         <br>
         <ul class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action">
-                TIL
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">WIL</a>
-            <a href="#" class="list-group-item list-group-item-action">잡담</a>
+            <a href="{{url_for('category', id=category.id)}}" class="list-group-item list-group-item-action">TIL</a>
+            <a href="category/2" class="list-group-item list-group-item-action">WIL</a>
+            <a href="category/3" class="list-group-item list-group-item-action">잡담</a>
         </ul>
     </div>
 
     <div class="post" id="post">
+        <button class="showpost" onclick="location.href='post/${s}'">게시글보기</button>
         <div class="ontop">
             <h1>게시글 제목</h1>
             <div style="padding-top: 30px; padding-left: 50px">카테고리</div>
-            <button onclick="window.location.href='post/create'" style="padding-top: 30px; padding-left: 50px">게시글 작성</button>
+            <button onclick="location.href='post/create'" style="padding-top: 30px; padding-left: 50px">게시글 작성</button>
         </div>
         <div class="post_info">
             <h5 style="font-weight: bold">작성자</h5>

@@ -17,7 +17,7 @@ curs = db.cursor()
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template('index.html')
+    return render_template('main.html')
 
 
 @app.route("/post/get", methods=["GET"])
@@ -42,11 +42,39 @@ def get_post():
         doc.append(pos)
     return jsonify({"posts": doc})
 
-@app.route("/post/getone", methods=["GET"])
-def show_post():
+@app.route("/category/<id>", methods=["GET"])
+def category(id):
+    return render_template('category.html')
+
+@app.route("/category/get/<id>", methods=["GET"])
+def get_category(id):
+    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
+    from post p inner join category c on p.category_name = c.category_name 
+    inner JOIN users u ON p.user_id = u.user_id
+    where c.id = %s""" %(id)
+
+    curs.execute(sql)
+    post_list = curs.fetchall()
+    print(post_list)
+
+    doc = []
+    for post in post_list:
+        pos = {"number": post[0],
+               "title": post[1],
+               "content": post[2],
+               "created_at": post[3],
+               "category": post[4],
+               "name": post[5]}
+
+        doc.append(pos)
+    return jsonify({"posts": doc})
+
+@app.route("/post/<id>", methods=["GET"])
+def show_post(id):
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
         from post p inner join category c on p.category_name = c.category_name 
-        inner JOIN users u ON p.user_id = u.user_id"""
+        inner JOIN users u ON p.user_id = u.user_id
+        where p.id=%s""" %(id)
 
     curs.execute(sql)
     post = curs.fetchall()
