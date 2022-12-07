@@ -1,12 +1,38 @@
 
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13_LOG Creat</title>
+    <link rel="stylesheet" href="../static/Login_Styles.css">
 
+   <script src="../static/jquery-1.12.4.js"> </script>
 
-    <form method = "get" id = "login" action= {{url_for("login")}}>
-        <input type="id" id="user_id" name="user_id" placeholder="ID">
-        <input type="pw" id="user_pw" name="user_pw" placeholder="PW">
-        <button type="submit" class="login">로그인</button>
-    </form>
-    <a href="/register">회원가입</a>
-
-
-
+</head>
+<body>
+    <section class="login-form">
+        <h1><a href=""><img src="../static/logo.png"></a></h1>
+        <form method = "get" id = "login" action= {{url_for("login")}}>
+            <div class="int-area">
+                <input type="text" name="user_id" id="user_id"
+                autocomplete="off"required>
+                <label for="id">ID</label>
+            </div>
+            <div class="int-area">
+                <input type="password" name="user_pw" id="user_pw"
+                autocomplete="off"required>
+                <label for="id">PASSWORD</label>
+            </div>
+                <!-- <input type="name" id="name" name="name" placeholder="NAME"> -->
+            <div class="btn-area">
+                <button type="submit" class="login">로그인</button>
+            </div>
+            <div class="caption">
+                Not registerd? <a href="/register"> Creat an account </a>
+            </div>
+        </form>
+    </section>
+</body>
+</html

@@ -17,6 +17,7 @@ def main():
 def join():
     return render_template('register.html')
 
+
 @app.route('/register', methods=["post"])
 def register():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
@@ -69,6 +70,7 @@ def logout():
 @app.route('/user', methods=['POST'])
 def insert_user():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     cursor = db.cursor()
 
     cursor.execute("USE newsfeed;")
@@ -93,6 +95,7 @@ def insert_user():
 @app.route('/mypage/<id>', methods=['GET'])
 def show_user(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     print(id)
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
@@ -119,6 +122,7 @@ def show_user(id):
 def get_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
+
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id"""
@@ -147,6 +151,7 @@ def category(id):
 @app.route("/category/get/<id>", methods=["GET"])
 def get_category(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
@@ -173,6 +178,7 @@ def get_category(id):
 @app.route("/post/<id>", methods=["GET"])
 def show_post(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
         from post p inner join category c on p.category_name = c.category_name 
@@ -216,6 +222,7 @@ def create_post():
 @app.route("/up/<id>", methods=["GET", "POST"])
 def post_up(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     curs = db.cursor()
     # post_id = request.form['id_give']
     if request.method == "GET":
@@ -244,6 +251,7 @@ def post_up(id):
 @app.route("/post/del", methods=["Delete"])
 def post_del():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     curs = db.cursor()
     id = request.form['del_give']
     sql = """delete from post where id = '%s'""" % (id)
@@ -261,4 +269,3 @@ if __name__ == '__main__':
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.run(host='127.0.0.1', port=8000, debug=True)
-

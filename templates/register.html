@@ -1,6 +1,41 @@
-<form method="post" id="register" action={{url_for("register")}}>
-    <input type="id" id="user_id" name="user_id" placeholder="ID">
-    <input type="pw" id="user_pw" name="user_pw" placeholder="PW">
-    <input type="name" id="name" name="name" placeholder="NAME">
-    <button type="submit" class="register">회원가입</button>
-</form>
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13_LOG Creat</title>
+    <link rel="stylesheet" href="../static/Login_Styles.css">
+    <script src="../static/jquery-1.12.4.js"> </script>
+    
+</head>
+<body>
+    <section class="login-form">
+        <h1><a href=""><img src="../static/logo.png"></a></h1>
+        <form method = "post" id = "register" action= {{url_for("register")}}>
+            <div class="int-area">
+                <input type="text" name="user_id" id="user_id"
+                autocomplete="off"required>
+                <label for="id">ID</label>
+            </div>
+            <div class="int-area">
+                <input type="password" name="user_pw" id="user_pw"
+                autocomplete="off"required>
+                <label for="id">PASSWORD</label>
+            </div>
+            <div class="int-area">
+                <input type="name" name="name" id="name"
+                autocomplete="off"required>
+                <label for="id">NAME</label>
+            </div>        
+                <!-- <input type="name" id="name" name="name" placeholder="NAME"> -->
+            <div class="btn-area">
+                <button type="submit" class="register">회원가입</button>
+            </div>
+            
+        </form>
+    </section>
+</body>
+</html>
+
