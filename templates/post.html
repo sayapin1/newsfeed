@@ -104,8 +104,19 @@
 </style>
 
 <body>
-<script
-></script>
+<script>
+    function del_post(del) {
+        $.ajax({
+            type: "Delete",
+            url: "/post/del",
+            data: {del_give: del},
+            success: function (response) {
+                alert(response['msg'])
+                window.location.href='/'
+            }
+        })
+    }
+</script>
 <header>
     <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
@@ -171,8 +182,8 @@
         <div class="showcontent">{{post[2]}}</div>
         <div class="buttonplace">
             <button class="previouspage" onclick="location.href='#';">이전 게시글</button>
-            <button style="margin-right: 20px; border-radius: 10px; border: none">삭제</button>
-            <button style="border-radius: 10px; border: none">수정</button>
+            <button style="margin-right: 20px; border-radius: 10px; border: none" onclick="del_post({{post[0]}})">삭제</button>
+            <button style="border-radius: 10px; border: none" onclick="location.href='/up/{{post[0]}}'">수정</button>
             <button class="nextpage" onclick="location.href='#';">다음 게시글</button>
         </div>
 

@@ -81,9 +81,10 @@
         let b = '';
 
         var link = document.location.href;
+        console.log(link)
         link = link.replace("//", "/");
         var a = link.split("/");
-        b = a[4]
+        b = a[3]
 
         up_post(b)
     }
@@ -95,7 +96,7 @@
         console.log("id", id)
         $.ajax({
             type: "POST",
-            url: `/post/up/${id}`,
+            url: `/up/${id}`,
             data: {
                 title_give: title,
                 content_give: content,

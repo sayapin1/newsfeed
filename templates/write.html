@@ -81,9 +81,9 @@
     }
 
     function create_post() {
-        let name = $('#name').val();
-        let user_id = $('#id').val();
-        let user_pw = $('#pw').val();
+        // let name = $('#name').val();
+        // let user_id = $('#id').val();
+        // let user_pw = $('#pw').val();
         let title = $('#title').val();
         let content = $('#content').val();
         let category_name = $('#category_name').val();
@@ -91,9 +91,9 @@
             type: "POST",
             url: "/post/create",
             data: {
-                name_give: name,
-                user_id_give: user_id,
-                user_pw_give: user_pw,
+                // name_give: name,
+                // user_id_give: user_id,
+                // user_pw_give: user_pw,
                 title_give: title,
                 content_give: content,
                 cat_name_give: category_name
@@ -159,11 +159,6 @@
             <option value="WIL">WIL</option>
             <option value="잡담">잡담</option>
         </select>
-        <div class="writeyourinfo">
-            <input type="text" id="name" placeholder="이름을 입력해주세요">
-            <input type="text" id="id" placeholder="id를 입력해주세요">
-            <input type="text" id="pw" placeholder="pw를 입력해주세요">
-        </div>
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">

@@ -119,7 +119,6 @@ def show_user(id):
 def get_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
-
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id"""
@@ -191,24 +190,21 @@ def show_post(id):
 def create_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
+
     if request.method == "GET":
         return render_template('write.html')
 
     else:
-        name = request.form['name_give']
-        user_id = request.form['user_id_give']
-        user_pw = request.form['user_pw_give']
+
+        # name = request.form['name_give']
+        user_id = session.get("user_id")
+        # user_pw = request.form['user_pw_give']
         title = request.form['title_give']
         content = request.form['content_give']
         category_name = request.form['cat_name_give']
+        print(user_id)
 
-        sql = """insert into users values (null, '%s', '%s', '%s',null, null)""" % (name, user_id, user_pw)
-        curs.execute(sql)
-        curs.fetchall()
-        db.commit()
-
-        sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" % (
-        title, content, user_id, category_name)
+        sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" %(title, content, user_id, category_name)
         curs.execute(sql)
         curs.fetchall()
         db.commit()
@@ -217,7 +213,7 @@ def create_post():
         return jsonify({'msg': '등록완료!'})
 
 
-@app.route("/post/up/<id>", methods=["GET", "POST"])
+@app.route("/up/<id>", methods=["GET", "POST"])
 def post_up(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
