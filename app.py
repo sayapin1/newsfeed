@@ -42,7 +42,6 @@ def login():
     if request.method == "POST":
         user_id = request.form['user_id']
         user_pw = request.form['user_pw']
-        print("1")
         cursor = db.cursor()
         if cursor.execute("SELECT * FROM users WHERE user_id=%s", (user_id)):
 
@@ -53,7 +52,6 @@ def login():
             db.close()
 
             if user_pw == rows[2]:
-                print("3")
                 session['user_id'] = rows[1]
                 print(session['user_id'])
                 return render_template("main.html")
@@ -69,11 +67,9 @@ def insert_user():
 
     cursor.execute('select * from users;')
 
-
     name = request.form['name_give']
     intro = request.form['intro_give']
     picture = request.form['picture_give']
-
 
     sql = """insert into users (name, intro, picture)
          values (%s,%s,%s)
