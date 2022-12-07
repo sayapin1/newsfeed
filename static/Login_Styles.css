@@ -35,6 +35,7 @@ body::before{
     margin-top: 20px;
 }
 .int-area:first-child {margin-top: 0;}
+
 .int-area input {
     width: 100%;
     padding: 20px 10px 10px;

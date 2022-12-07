@@ -7,37 +7,13 @@
     <title>13_LOG Creat</title>
     <link rel="stylesheet" href="../static/Login_Styles.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--    <script src="../static/jquery-1.12.4.js"> </script>-->
-
-    <script>
-    function login() {
-        let user_id = $('#user_id').val()
-        let user_pw = $('#user_pw').val()
-        console.log(user_id)
-        console.log(user_pw)
-
-
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            data: {user_id: user_id,
-                    user_pw: user_pw},
-            success: function (response) {
-                window.location.href="/"
-            }
-        });
-    }
-
-    </script>
+   <script src="../static/jquery-1.12.4.js"> </script>
 
 </head>
 <body>
     <section class="login-form">
         <h1><a href=""><img src="../static/logo.png"></a></h1>
-
-        <form action="/login">
-
+        <form method = "get" id = "login" action= {{url_for("login")}}>
             <div class="int-area">
                 <input type="text" name="user_id" id="user_id"
                 autocomplete="off"required>
@@ -48,17 +24,14 @@
                 autocomplete="off"required>
                 <label for="id">PASSWORD</label>
             </div>
-           
+                <!-- <input type="name" id="name" name="name" placeholder="NAME"> -->
             <div class="btn-area">
-                <button id ='btn'
-                 type="button" onclick="login()" >Login</button>
+                <button type="submit" class="login">로그인</button>
             </div>
             <div class="caption">
-                Not registerd? <a href="../templates/register.html"> Creat an account </a>
+                Not registerd? <a href="/register"> Creat an account </a>
             </div>
         </form>
-
-
     </section>
 </body>
-</html>
+</html

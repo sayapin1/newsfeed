@@ -6,30 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13_LOG Creat</title>
     <link rel="stylesheet" href="../static/Login_Styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-     <script>
-        function reg() {
-            let user_id = $('#user_id').val()
-            let user_pw = $('#user_pw').val()
-            console.log(user_pw)
-            $.ajax({
-                type: "POST",
-                url: "/register",
-                data: {user_id: user_id,
-                        user_pw: user_pw},
-                success: function (response) {
-                    window.location.href="/"
-                }
-            })
-        }
-
-    </script>
+    <script src="../static/jquery-1.12.4.js"> </script>
+    
 </head>
 <body>
     <section class="login-form">
         <h1><a href=""><img src="../static/logo.png"></a></h1>
-        <form action="register">
+        <form method = "post" id = "register" action= {{url_for("register")}}>
             <div class="int-area">
                 <input type="text" name="user_id" id="user_id"
                 autocomplete="off"required>
@@ -40,14 +23,16 @@
                 autocomplete="off"required>
                 <label for="id">PASSWORD</label>
             </div>
-           
+            <div class="int-area">
+                <input type="name" name="name" id="name"
+                autocomplete="off"required>
+                <label for="id">NAME</label>
+            </div>        
+                <!-- <input type="name" id="name" name="name" placeholder="NAME"> -->
             <div class="btn-area">
-                <button id ='btn' onclick="reg()"
-                 type="button">Register</button>
+                <button type="submit" class="register">회원가입</button>
             </div>
-            <div class="caption">
-                already have account? <a href="/login"> Go to Login </a>
-            </div>
+            
         </form>
     </section>
 </body>
