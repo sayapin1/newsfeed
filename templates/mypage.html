@@ -124,9 +124,66 @@
 </style>
 
 <body>
-<script
+<script>
+    $(document).ready(function () {
+        const id = "{{session['id']}}"
+        console.log(id)
+        location.href= `/mypage/${id}`;
+        show_user(id)
+    });
+$(document).ready(function () {
+    function getUrlParams() {
+        let params = {};
 
-    ></script>
+        window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+            function (str, key, value) {
+                params[key] = value;
+            }
+        );
+        console.log("params")
+        return params;
+    }
+
+    const params = getUrlParams();
+    const id = params.id;
+
+    show_user(id);
+
+});
+
+    function show_user(id) {
+    $.ajax({
+        type: "GET",
+        url: `/mypage/${id}`,
+        data: {},
+        success: function (response) {
+            console.log(response["mypage"])
+            let rows = response['mypage'];
+            let name = rows["name"];
+            let intro = rows["intro"];
+            let picture = rows["picture"];
+            console.log(name)
+            console.log(intro)
+            console.log(picture)
+
+            let temp_html = `
+                                <div class="myphoto">
+                                   ddd
+                                </div>
+                                <div class="name">
+                                    ${name}
+                                </div>
+                                <div class="information">
+                                   ${intro}
+                                </div>
+                            `
+
+            $('#profile').append(temp_html);
+            }
+        })
+    }
+
+</script>
 <header>
       <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
@@ -180,18 +237,7 @@
     </div>
 
     <div class="wrap2">
-        <div class="profilewrap">
-            <div class="myphoto">
-                사진이 들어가야겠죠?
-            </div>
-            <div class="information">
-                여기는 프로필 소개입니다 <br>
-                저는 누구고<br>
-                저는 누구입니다<br>
-                여러분 반가워요<br>
-                깔끔함을 위해<br>
-                border들은 나중에 뺄겁니다
-            </div>
+        <div id="profile" class="profilewrap">
         </div>
         <div class="contentslist">
             <div class="card" onclick="location.href='#';">
