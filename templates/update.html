@@ -76,31 +76,35 @@
     }
 </style>
 <script>
-    function join() {
-        alert('저장 완료');
+
+    function updatenow() {
+        let b = '';
+
+        var link = document.location.href;
+        link = link.replace("//", "/");
+        var a = link.split("/");
+        b = a[4]
+
+        up_post(b)
     }
 
-    function create_post() {
-        let name = $('#name').val();
-        let user_id = $('#id').val();
-        let user_pw = $('#pw').val();
+    function up_post(id) {
         let title = $('#title').val();
         let content = $('#content').val();
         let category_name = $('#category_name').val();
+        console.log("id", id)
         $.ajax({
             type: "POST",
-            url: "/post/create",
+            url: `/post/up/${id}`,
             data: {
-                name_give: name,
-                user_id_give: user_id,
-                user_pw_give: user_pw,
                 title_give: title,
                 content_give: content,
-                cat_name_give: category_name
+                cat_name_give: category_name,
+                // id_give: id
             },
             success: function (response) {
                 alert(response['msg'])
-                window.location.href='/'
+                window.location.href = '/'
             }
         })
     }
@@ -147,37 +151,32 @@
         </div>
     </div>
 </header>
-<div class="wrap">
-    <h1> 글 작성 하기</h1>
+<div class="wrap" id="wrap">
+    <h1> 글 수정 하기</h1>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <label class="input-group-text" for="category_name">Category</label>
         </div>
         <select class="custom-select" id="category_name">
-            <option selected>-- Category를 정하십시오 --</option>
+            <option selected>{{data[2]}}</option>
             <option value="TIL">TIL</option>
             <option value="WIL">WIL</option>
             <option value="잡담">잡담</option>
         </select>
-        <div class="writeyourinfo">
-            <input type="text" id="name" placeholder="이름을 입력해주세요">
-            <input type="text" id="id" placeholder="id를 입력해주세요">
-            <input type="text" id="pw" placeholder="pw를 입력해주세요">
-        </div>
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text">제목</span>
         </div>
-        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="title">
+        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="title" value="{{data[0]}}">
     </div>
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">내용</span>
         </div>
-        <textarea class="form-control" aria-label="With textarea" id="content"></textarea>
+        <textarea class="form-control" aria-label="With textarea" id="content">{{data[1]}}</textarea>
     </div>
-    <button type="button" onclick="create_post()" class="btn btn-primary btn-join">저장</button>
+    <button type="button" onclick="updatenow()" class="btn btn-primary btn-join">저장</button>
 </div>
 </body>
 

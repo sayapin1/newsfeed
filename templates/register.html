@@ -6,38 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13_LOG Creat</title>
     <link rel="stylesheet" href="../static/Login_Styles.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--    <script src="../static/jquery-1.12.4.js"> </script>-->
 
-    <script>
-    function login() {
-        let user_id = $('#user_id').val()
-        let user_pw = $('#user_pw').val()
-        console.log(user_id)
-        console.log(user_pw)
-
-
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            data: {user_id: user_id,
-                    user_pw: user_pw},
-            success: function (response) {
-                window.location.href="/"
-            }
-        });
-    }
+     <script>
+        function reg() {
+            let user_id = $('#user_id').val()
+            let user_pw = $('#user_pw').val()
+            console.log(user_pw)
+            $.ajax({
+                type: "POST",
+                url: "/register",
+                data: {user_id: user_id,
+                        user_pw: user_pw},
+                success: function (response) {
+                    window.location.href="/"
+                }
+            })
+        }
 
     </script>
-
 </head>
 <body>
     <section class="login-form">
         <h1><a href=""><img src="../static/logo.png"></a></h1>
-
-        <form action="/login">
-
+        <form action="register">
             <div class="int-area">
                 <input type="text" name="user_id" id="user_id"
                 autocomplete="off"required>
@@ -50,15 +42,13 @@
             </div>
            
             <div class="btn-area">
-                <button id ='btn'
-                 type="button" onclick="login()" >Login</button>
+                <button id ='btn' onclick="reg()"
+                 type="button">Register</button>
             </div>
             <div class="caption">
-                Not registerd? <a href="../templates/register.html"> Creat an account </a>
+                already have account? <a href="/login"> Go to Login </a>
             </div>
         </form>
-
-
     </section>
 </body>
 </html>
