@@ -3,73 +3,72 @@ import pymysql
 
 
 app = Flask(__name__)
-db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
-
-
 
 
 @app.route('/')
 def main():
-    return render_template('main.html')
-
-
-@app.route('/register', methods=["GET", "POST"])
-def register():
-    if request.method == 'GET':
-        return render_template('register.html')
+    if "user_id" in session:
+        print(session["user_id"])
+        return render_template("main.html", username = session.get("user_id"))
     else:
-        cursor = db.cursor()
+        return render_template('login.html')
 
-        cursor.execute("USE newsfeed;")
+@app.route('/register')
+def join():
+    return render_template('register.html')
 
-        cursor.execute('select * from users;')
+@app.route('/register', methods=["GET"])
+def register():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
+    cursor = db.cursor()
+    cursor.execute("USE newsfeed;")
+    cursor.execute('select * from users;')
 
-        user_id = request.form['user_id']
-        user_pw = request.form['user_pw']
+    user_id = request.args.get("user_id")
+    user_pw = request.args.get("user_pw")
+    name = request.args.get("name")
 
-        cursor.execute("INSERT INTO users (user_id, user_pw) VALUES(%s,%s)", (user_id, user_pw))
+    cursor.execute("INSERT INTO users (user_id, user_pw, name) VALUES(%s,%s,%s)", (user_id, user_pw, name))
 
-        db.commit()
+    db.commit()
+    db.close()
+
+    return redirect(url_for("main"))
+
+
+@app.route('/login', methods=["GET"])
+def login():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
+    user_id = request.args.get("user_id")
+    user_pw = request.args.get("user_pw")
+
+    cursor = db.cursor()
+    if cursor.execute("SELECT * FROM users WHERE user_id=%s", (user_id)):
+        rows = cursor.fetchone()
+        print(rows)
+        print(rows[2])
         db.close()
 
-        return render_template("main.html")
-
-
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if request.method == "GET":
-        return render_template("login.html")
-
-    if request.method == "POST":
-        user_id = request.form['user_id']
-        user_pw = request.form['user_pw']
-        print("1")
-        cursor = db.cursor()
-        if cursor.execute("SELECT * FROM users WHERE user_id=%s", (user_id)):
-
-            rows = cursor.fetchone()
-            print(rows)
-            print(rows[2])
-            db.commit()
-            db.close()
-
-            if user_pw == rows[2]:
-                print("3")
-                session['user_id'] = rows[1]
-                print(session['user_id'])
-                return render_template("main.html")
-            else:
-                return "Error password or user not match"
+        if user_pw == rows[2]:
+            print("3")
+            session['user_id'] = rows[1]
+            print(session['user_id'])
+            return redirect(url_for("main")) #로그인성공 알럿?
         else:
-            return render_template("login.html")
+            return redirect(url_for("main")) #비밀번호 다름
+    else:
+        db.close()
+        return redirect(url_for("main")) #없는 아이디
 
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect(url_for('login'))
+    session.pop("user_id")
+    return redirect(url_for("main"))
+
 
 @app.route('/user', methods=['POST'])
 def insert_user():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     cursor = db.cursor()
 
     cursor.execute("USE newsfeed;")
@@ -93,6 +92,7 @@ def insert_user():
 
 @app.route('/mypage/<id>', methods=['GET'])
 def show_user(id):
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     print(id)
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
