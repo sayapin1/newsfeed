@@ -5,18 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13_LOG Creat</title>
-    <link rel="stylesheet" href="../static/Login_Styles.css">
+    <link rel="stylesheet" href="../static/Login_Style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
      <script>
         function reg() {
+            let user_name = $('#name').val()
             let user_id = $('#user_id').val()
             let user_pw = $('#user_pw').val()
             console.log(user_pw)
             $.ajax({
                 type: "POST",
                 url: "/register",
-                data: {user_id: user_id,
+                data: { name : user_name,
+                        user_id: user_id,
                         user_pw: user_pw},
                 success: function (response) {
                     window.location.href="/"
@@ -30,6 +32,11 @@
     <section class="login-form">
         <h1><a href=""><img src="../static/logo.png"></a></h1>
         <form action="register">
+            <div class="int-area">
+                <input type="text" name="name" id="name"
+                autocomplete="off"required>
+                <label for="id">name</label>
+            </div>
             <div class="int-area">
                 <input type="text" name="user_id" id="user_id"
                 autocomplete="off"required>

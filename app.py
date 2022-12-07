@@ -3,7 +3,7 @@ import pymysql
 
 
 app = Flask(__name__)
-db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
+db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
 
 @app.route('/')
@@ -22,10 +22,11 @@ def register():
 
         cursor.execute('select * from users;')
 
+        name = request.form['name']
         user_id = request.form['user_id']
         user_pw = request.form['user_pw']
 
-        cursor.execute("INSERT INTO users (user_id, user_pw) VALUES(%s,%s)", (user_id, user_pw))
+        cursor.execute("INSERT INTO users (name, user_id, user_pw) VALUES(%s,%s,%s)", (name,user_id, user_pw))
 
         db.commit()
         db.close()
