@@ -3,9 +3,9 @@ import pymysql
 
 
 app = Flask(__name__)
-db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
+db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
-curs = db.cursor()
+
 
 
 @app.route('/')
@@ -62,6 +62,12 @@ def login():
                 return "Error password or user not match"
         else:
             return render_template("login.html")
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
 @app.route('/user', methods=['POST'])
 def insert_user():
     cursor = db.cursor()
@@ -111,6 +117,8 @@ def show_user(id):
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
+    curs = db.cursor()
+
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id"""
@@ -137,6 +145,7 @@ def category(id):
 
 @app.route("/category/get/<id>", methods=["GET"])
 def get_category(id):
+    curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id
@@ -160,6 +169,7 @@ def get_category(id):
 
 @app.route("/post/<id>", methods=["GET"])
 def show_post(id):
+    curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
         from post p inner join category c on p.category_name = c.category_name 
         inner JOIN users u ON p.user_id = u.user_id
@@ -171,12 +181,9 @@ def show_post(id):
     return render_template('post.html', post=post[0])
 
 
-# @app.route("/write", methods=["GET"])
-# def createpage():
-#     return render_template('write.html')
-
 @app.route("/post/create", methods=["GET", "POST"])
 def create_post():
+    curs = db.cursor()
     if request.method == "GET":
         return render_template('write.html')
 
@@ -204,6 +211,7 @@ def create_post():
 
 @app.route("/post/up/<id>", methods=["GET", "POST"])
 def post_up(id):
+    curs = db.cursor()
     # post_id = request.form['id_give']
     if request.method == "GET":
         sql = """select p.title, p.content, p.category_name from post p WHERE p.id = %s""" %(id)
@@ -228,6 +236,7 @@ def post_up(id):
 
 @app.route("/post/del", methods=["Delete"])
 def post_del():
+    curs = db.cursor()
     id = request.form['del_give']
     sql = """delete from post where id = '%s'""" % (id)
 
