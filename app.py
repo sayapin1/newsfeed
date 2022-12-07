@@ -30,7 +30,7 @@ def register():
         db.commit()
         db.close()
 
-        return redirect(url_for("login"))
+        return render_template("main.html")
 
 
 @app.route('/login', methods=["GET", "POST"])

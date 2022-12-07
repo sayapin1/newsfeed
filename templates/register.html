@@ -19,8 +19,7 @@
                 data: {user_id: user_id,
                         user_pw: user_pw},
                 success: function (response) {
-                    alert(response)
-                    window.location.reload()
+                    window.location.href="/"
                 }
             })
         }
@@ -44,7 +43,7 @@
            
             <div class="btn-area">
                 <button id ='btn' onclick="reg()"
-                 type="submit">Register</button>
+                 type="button">Register</button>
             </div>
             <div class="caption">
                 already have account? <a href="/login"> Go to Login </a>
