@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en"> 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>13_LOG Creat</title>
-    <link rel="stylesheet" href="../static/Login_Styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--    <script src="../static/jquery-1.12.4.js"> </script>-->
 
-    <script>
-    </script>
-</head>
-<body>
-    <form methods = "get" id = "login" action= {{url_for("login")}}>
+
+
+    <form method = "get" id = "login" action= {{url_for("login")}}>
         <input type="id" id="user_id" name="user_id" placeholder="ID">
         <input type="pw" id="user_pw" name="user_pw" placeholder="PW">
         <button type="submit" class="login">로그인</button>
     </form>
     <a href="/register">회원가입</a>
-</body>
-</html>
+
+
 
