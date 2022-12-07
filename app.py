@@ -117,6 +117,7 @@ def show_user(id):
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
 
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
@@ -126,6 +127,7 @@ def get_post():
     curs.execute(sql)
     post_list = curs.fetchall()
     db.commit()
+    db.close()
 
     doc = []
     for post in post_list:
@@ -145,6 +147,7 @@ def category(id):
 
 @app.route("/category/get/<id>", methods=["GET"])
 def get_category(id):
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
@@ -154,6 +157,7 @@ def get_category(id):
     curs.execute(sql)
     post_list = curs.fetchall()
     print(post_list)
+    db.close()
 
     doc = []
     for post in post_list:
@@ -169,6 +173,7 @@ def get_category(id):
 
 @app.route("/post/<id>", methods=["GET"])
 def show_post(id):
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
         from post p inner join category c on p.category_name = c.category_name 
@@ -177,12 +182,14 @@ def show_post(id):
 
     curs.execute(sql)
     post = curs.fetchall()
+    db.close()
 
     return render_template('post.html', post=post[0])
 
 
 @app.route("/post/create", methods=["GET", "POST"])
 def create_post():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
     if request.method == "GET":
         return render_template('write.html')
@@ -205,18 +212,21 @@ def create_post():
         curs.execute(sql)
         curs.fetchall()
         db.commit()
+        db.close()
 
         return jsonify({'msg': '등록완료!'})
 
 
 @app.route("/post/up/<id>", methods=["GET", "POST"])
 def post_up(id):
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
     # post_id = request.form['id_give']
     if request.method == "GET":
         sql = """select p.title, p.content, p.category_name from post p WHERE p.id = %s""" %(id)
         curs.execute(sql)
         data = curs.fetchall()
+        db.close()
 
         return render_template('update.html', data=data[0])
 
@@ -230,12 +240,14 @@ def post_up(id):
         curs.execute(sql)
         curs.fetchall()
         db.commit()
+        db.close()
 
         return jsonify({'msg': '수정완료'})
 
 
 @app.route("/post/del", methods=["Delete"])
 def post_del():
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='0114', charset='utf8')
     curs = db.cursor()
     id = request.form['del_give']
     sql = """delete from post where id = '%s'""" % (id)
@@ -243,6 +255,7 @@ def post_del():
     curs.execute(sql)
     curs.fetchall()
     db.commit()
+    db.close()
 
     return jsonify({'msg': '삭제완료!'})
 
