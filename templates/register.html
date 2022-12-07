@@ -8,47 +8,15 @@
     <link rel="stylesheet" href="../static/Login_Styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-     <script>
-        function reg() {
-            let user_id = $('#user_id').val()
-            let user_pw = $('#user_pw').val()
-            console.log(user_pw)
-            $.ajax({
-                type: "POST",
-                url: "/register",
-                data: {user_id: user_id,
-                        user_pw: user_pw},
-                success: function (response) {
-                    window.location.href="/"
-                }
-            })
-        }
-
+    <script>
     </script>
 </head>
 <body>
-    <section class="login-form">
-        <h1><a href=""><img src="../static/logo.png"></a></h1>
-        <form action="register">
-            <div class="int-area">
-                <input type="text" name="user_id" id="user_id"
-                autocomplete="off"required>
-                <label for="id">ID</label>
-            </div>
-            <div class="int-area">
-                <input type="password" name="user_pw" id="user_pw"
-                autocomplete="off"required>
-                <label for="id">PASSWORD</label>
-            </div>
-           
-            <div class="btn-area">
-                <button id ='btn' onclick="reg()"
-                 type="button">Register</button>
-            </div>
-            <div class="caption">
-                already have account? <a href="/login"> Go to Login </a>
-            </div>
-        </form>
-    </section>
+    <form methods = "get" id = "register" action= {{url_for("register")}}>
+        <input type="id" id="user_id" name="user_id" placeholder="ID">
+        <input type="pw" id="user_pw" name="user_pw" placeholder="PW">
+        <input type="name" id="name" name="name" placeholder="NAME">
+        <button type="submit" class="register">회원가입</button>
+    </form>
 </body>
 </html>

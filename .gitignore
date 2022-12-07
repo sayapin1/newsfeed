@@ -1,0 +1,7 @@
+venv/
+readme.md
+*.xml
+*.iml
+*.json
+
+
