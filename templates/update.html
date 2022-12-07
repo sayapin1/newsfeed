@@ -76,36 +76,72 @@
     }
 </style>
 <script>
+    // $(document).ready(function () {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/post/get",
+    //         data: {},
+    //         success: function (response) {
+    //             let rows = response['pre_updates']
+    //             for (let i = 0; i < rows.length; i++) {
+    //                 let title = rows['title'];
+    //                 let content = rows['content'];
+    //                 let category = rows['category'];
+    //
+    //                 let temp_html = `<div class="input-group mb-3">
+    //                                     <div class="input-group-prepend">
+    //                                         <label class="input-group-text" for="category_name">Category</label>
+    //                                     </div>
+    //                                     <select class="custom-select" id="category_name">
+    //                                         <option value="TIL">TIL</option>
+    //                                         <option value="WIL">WIL</option>
+    //                                         <option value="잡담">잡담</option>
+    //                                     </select>
+    //                                 </div>
+    //                                 <div class="input-group mb-3">
+    //                                     <div class="input-group-prepend">
+    //                                         <span class="input-group-text">제목</span>
+    //                                     </div>
+    //                                     <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="title" value="${title}">
+    //                                 </div>
+    //                                 <div class="input-group">
+    //                                     <div class="input-group-prepend">
+    //                                         <span class="input-group-text">내용</span>
+    //                                     </div>
+    //                                     <textarea class="form-control" aria-label="With textarea" id="content" value="${content}"></textarea>
+    //                                 </div>
+    //                                 <button type="button" onclick="updatenow()" class="btn btn-primary btn-join">저장</button>`
+    //
+    //                 $('#wrap').append(temp_html)
+    //             }
+    //         }
+    //     })
+    // })
+
     function updatenow() {
-        function getUrlParams() {
-            let params = {};
+        let b = '';
 
-            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-                function (str, key, value) {
-                    params[key] = value;
-                }
-            );
-            return params;
-        }
+        var link = document.location.href;
+        link = link.replace("//", "/");
+        var a = link.split("/");
+        b = a[4]
 
-        const params = getUrlParams();
-        const id = params.id;
-
-        up_post(id)
+        up_post(b)
     }
 
     function up_post(id) {
         let title = $('#title').val();
         let content = $('#content').val();
         let category_name = $('#category_name').val();
+        console.log("id", id)
         $.ajax({
             type: "POST",
             url: `/post/up/${id}`,
             data: {
                 title_give: title,
                 content_give: content,
-                cat_name_give: category_name
-                // id_give: `${id}`
+                cat_name_give: category_name,
+                // id_give: id
             },
             success: function (response) {
                 alert(response['msg'])
@@ -156,13 +192,14 @@
         </div>
     </div>
 </header>
-<div class="wrap">
+<div class="wrap" id="wrap">
     <h1> 글 수정 하기</h1>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <label class="input-group-text" for="category_name">Category</label>
         </div>
         <select class="custom-select" id="category_name">
+            <option selected>{{data[2]}}</option>
             <option value="TIL">TIL</option>
             <option value="WIL">WIL</option>
             <option value="잡담">잡담</option>
@@ -172,13 +209,13 @@
         <div class="input-group-prepend">
             <span class="input-group-text">제목</span>
         </div>
-        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="title">
+        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="title" value="{{data[0]}}">
     </div>
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">내용</span>
         </div>
-        <textarea class="form-control" aria-label="With textarea" id="content"></textarea>
+        <textarea class="form-control" aria-label="With textarea" id="content">{{data[1]}}</textarea>
     </div>
     <button type="button" onclick="updatenow()" class="btn btn-primary btn-join">저장</button>
 </div>

@@ -19,12 +19,6 @@ curs = db.cursor()
 def home():
     return render_template('index.html')
 
-@app.route("/write", methods=["GET"])
-def createpage():
-    return render_template('write.html')
-
-
-
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
@@ -35,7 +29,6 @@ def get_post():
     curs.execute(sql)
     post_list = curs.fetchall()
     db.commit()
-    print(post_list)
 
     doc = []
     for post in post_list:
@@ -49,56 +42,93 @@ def get_post():
         doc.append(pos)
     return jsonify({"posts": doc})
 
-@app.route("/post/create", methods=["POST"])
+@app.route("/post/getone", methods=["GET"])
+def show_post():
+    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
+        from post p inner join category c on p.category_name = c.category_name 
+        inner JOIN users u ON p.user_id = u.user_id"""
+
+    curs.execute(sql)
+    post = curs.fetchall()
+
+    return render_template('post.html', post=post[0])
+
+
+# @app.route("/write", methods=["GET"])
+# def createpage():
+#     return render_template('write.html')
+
+@app.route("/post/create", methods=["GET", "POST"])
 def create_post():
-    name = request.form['name_give']
-    user_id = request.form['user_id_give']
-    user_pw = request.form['user_pw_give']
-    title = request.form['title_give']
-    content = request.form['content_give']
-    category_name = request.form['cat_name_give']
+    if request.method == "GET":
+        return render_template('write.html')
 
-    sql = """insert into users values (null, '%s', '%s', '%s',null, null)""" % (name, user_id, user_pw)
-    curs.execute(sql)
-    curs.fetchall()
-    db.commit()
+    else:
+        name = request.form['name_give']
+        user_id = request.form['user_id_give']
+        user_pw = request.form['user_pw_give']
+        title = request.form['title_give']
+        content = request.form['content_give']
+        category_name = request.form['cat_name_give']
 
-    sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" %(title, content, user_id, category_name)
-    curs.execute(sql)
-    curs.fetchall()
-    db.commit()
+        sql = """insert into users values (null, '%s', '%s', '%s',null, null)""" % (name, user_id, user_pw)
+        curs.execute(sql)
+        curs.fetchall()
+        db.commit()
 
-    return jsonify({'msg':'등록완료!'})
+        sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" % (
+        title, content, user_id, category_name)
+        curs.execute(sql)
+        curs.fetchall()
+        db.commit()
 
-@app.route("/post/update/<id>", methods=["GET"])
-def updatepage(id):
-    return render_template('update.html')
+        return jsonify({'msg': '등록완료!'})
 
-@app.route("/post/up/<id>", methods=["POST"])
+
+@app.route("/post/up/<id>", methods=["GET", "POST"])
 def post_up(id):
     # post_id = request.form['id_give']
-    title = request.form['title_give']
-    content = request.form['content_give']
-    category_name = request.form['cat_name_give']
+    if request.method == "GET":
+        sql = """select p.title, p.content, p.category_name from post p WHERE p.id = %s""" %(id)
+        curs.execute(sql)
+        data = curs.fetchall()
 
-    # sql = """update post set title = '%s', content = '%s', category_name = '%s'  where id ='%s'""" %(title, content, category_name, id)
-    sql =
-    curs.execute(sql)
-    curs.fetchall()
-    db.commit()
+        return render_template('update.html', data=data[0])
 
-    return jsonify({'msg': '수정완료'})
+    if request.method == "POST":
+        title = request.form['title_give']
+        content = request.form['content_give']
+        category_name = request.form['cat_name_give']
+
+        sql = """UPDATE newsfeed.post t SET t.title = '%s', t.content = '%s', t.category_name = '%s' WHERE t.id = %s""" % (
+        title, content, category_name, id)
+        curs.execute(sql)
+        curs.fetchall()
+        db.commit()
+
+        return jsonify({'msg': '수정완료'})
+
 
 @app.route("/post/del", methods=["Delete"])
 def post_del():
     id = request.form['del_give']
-    sql = """delete from post where id = '%s'""" %(id)
+    sql = """delete from post where id = '%s'""" % (id)
 
     curs.execute(sql)
     curs.fetchall()
     db.commit()
 
-    return jsonify({'msg':'삭제완료!'})
+    return jsonify({'msg': '삭제완료!'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
+
+ # doc = []
+        # for content in pre_update:
+        #     a = {"title":content[0],
+        #         "content": content[1],
+        #         "category": content[2]}
+        #
+        #     doc.append(a)

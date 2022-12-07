@@ -29,7 +29,7 @@
         padding: 30px;
     }
 
-    .content {
+    .post {
         border: 2px solid gray;
         padding: 30px;
 
@@ -93,6 +93,14 @@
         justify-content: flex-end;
     }
 
+    .ontop {
+        display: flex;
+    }
+
+    .post_info {
+        display: flex;
+    }
+
 </style>
 
 <body>
@@ -150,8 +158,16 @@
         </ul>
     </div>
 
-    <div class="content">
-        <h1>게시글 제목</h1>
+    <div class="post" id="post">
+        <div class="ontop">
+            <h1>{{post}}</h1>
+            <div style="padding-top: 30px; padding-left: 50px">카테고리</div>
+            <button onclick="window.location.href='post/create'" style="padding-top: 30px; padding-left: 50px">게시글 작성</button>
+        </div>
+        <div class="post_info">
+            <h5 style="font-weight: bold">작성자</h5>
+            <div style="padding-left: 30px">만들어진 시간</div>
+        </div>
         <div class="showcontent">게시글이 보입니다.<br>border는 싹 지울 예정입니다.</div>
         <div class="buttonplace">
             <button class="previouspage" onclick="location.href='#';">이전 게시글</button>
