@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from datetime import timedelta
+
 from flask_paginate import Pagination, get_page_args
 
 import pymysql
 from flask_bcrypt import Bcrypt 
+
 
 app = Flask(__name__)
 
@@ -14,8 +16,10 @@ Bcrypt = Bcrypt(app)
 def main():
     if "user_id" in session:
         print(session["user_id"])
+
         return redirect(url_for("get_all_post"))
         # return render_template("main.html", username = session.get("user_id"))
+
 
     else:
         return render_template('login.html')
@@ -28,7 +32,9 @@ def join():
 
 @app.route('/register', methods=["post"])
 def register():
+
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     cursor = db.cursor()
     cursor.execute("USE newsfeed;")
     cursor.execute('select * from users;')
@@ -37,8 +43,10 @@ def register():
     user_pw = request.form["user_pw"]
     name = request.form["name"]
 
+
     cursor.execute("INSERT INTO users (user_id, user_pw,name) VALUES(%s,%s,%s)", (user_id, 
     Bcrypt.generate_password_hash(user_pw), name))
+
 
 
     db.commit()
@@ -91,6 +99,7 @@ def profile_up():
         db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
         cursor = db.cursor()
+
         cursor.execute('select * from users;')
 
         name = request.form['name']
@@ -110,8 +119,10 @@ def profile_up():
 
 @app.route("/profile/<user_id>")
 def profile(user_id):
+
     per_page = 6
     page, _, offset = get_page_args(per_page=per_page)
+
     print(user_id)
     if user_id:
         num = user_id
@@ -125,6 +136,7 @@ def profile(user_id):
         num = session["user_id"]
         check = True
     print(check)
+
     print(num)
 
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
@@ -143,6 +155,7 @@ def profile(user_id):
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
 
     return render_template('profile.html', rows=rows, check=check, pagination=pagination)
+
 
 @app.route("/myprofile")
 def myprofile():
@@ -234,18 +247,36 @@ def show_post(user_id, id):
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
         from post p inner join category c on p.category_name = c.category_name 
         inner JOIN users u ON p.user_id = u.user_id
-        where u.user_id='%s' and p.id = %s""" % (user_id, id)
 
+        where u.user_id='%s' and p.id = %s""" % (user_id, id)
+        
     curs.execute(sql)
     post = curs.fetchall()
+    
+    user_id = post[0][6]
+    
+    if user_id:
+        owner = user_id
+        ses = session["user_id"]
+        if owner == ses:
+            check = True
+        else:
+            check = False
+    else:
+        owner = session["user_id"]
+        check = True
+        
     db.close()
 
-    return render_template('post.html', post=post[0])
+    return render_template('post.html', post=post[0], check = check)
+
 
 
 @app.route("/post/create", methods=["GET", "POST"])
 def create_post():
+
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
     curs = db.cursor()
 
     if request.method == "GET":
@@ -273,6 +304,7 @@ def create_post():
 
 @app.route("/up/<id>", methods=["GET", "POST"])
 def post_up(id):
+
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
     curs = db.cursor()
@@ -302,7 +334,9 @@ def post_up(id):
 
 @app.route("/post/del", methods=["Delete"])
 def post_del():
+
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
 
     curs = db.cursor()
     id = request.form['del_give']

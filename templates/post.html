@@ -1,4 +1,6 @@
+
 {% extends 'base.html' %} {% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +25,7 @@
         justify-content: center;
     }
 
+
     .post {
         border: none;
         padding: 30px;
@@ -41,6 +44,7 @@
         justify-content: center;
         margin-top: 30px
     }
+
 
     .ontop {
         display: flex;
@@ -101,8 +105,12 @@
         <div class="showcontent">{{post[2]}}</div>
         <div class="buttonplace">
 <!--            <button class="previouspage" onclick="location.href='#';">이전 게시글</button>-->
+
+            {% if check == True %}  
             <button style="margin-right: 20px; border-radius: 10px; border: none; padding:10px" onclick="del_post({{post[0]}})">삭제</button>
             <button style="border-radius: 10px; border: none; padding:10px" onclick="location.href='/up/{{post[0]}}'">수정</button>
+            {% endif %}
+
 <!--            <button class="nextpage" onclick="location.href='#';">다음 게시글</button>-->
         </div>
 
@@ -111,4 +119,6 @@
 
 </body>
 </html>
+
 {% endblock %}
+

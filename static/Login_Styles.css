@@ -20,7 +20,10 @@ body::before{
 .login-form{position: relative; z-index: 2;}
 .login-form h1  {
     
+<<<<<<<< HEAD:static/Login_Styles.css
     
+========
+>>>>>>>> origin/chi:static/Login_Style.css
     text-align: center;
     margin-bottom: 60px;
    

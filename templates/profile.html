@@ -1,4 +1,6 @@
+
 {% extends 'base.html' %} {% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +14,7 @@
             integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
             crossorigin="anonymous"></script>
 
+
     <title>Title</title>
 </head>
 <style>
@@ -19,10 +22,9 @@
         display: flex;
         flex-direction: row;
         align-items: flex-start;
-        justify-content: space-evenly;
-        margin: 50px auto;
-        width: 80%;
-
+        justify-content: center;
+        margin: 20px;
+    }
 
     .wrap2 {
         display: flex;
@@ -137,6 +139,7 @@
     }
 
 
+
 </style>
 <body>
 <header>
@@ -183,6 +186,7 @@
     {% if check == True %}
     <button onclick="location.href='/profile/up'">프로필작성/수정</button>
     {% endif %}
+
     <div class="wrap_info">
         <div class="myphoto">
             ddd
@@ -193,6 +197,7 @@
     </div>
     <div class="information">
         {{rows[0][4]}}
+
     </div>
 </div>
 <div class="category">Category<br>
@@ -210,6 +215,7 @@
     <div id="profile" class="profilewrap">
     </div>
     <div class="contentslist">
+
         {% for i in rows %}
         <div class="card" onclick="location.href='/post/{{i[1]}}/{{i[4]}}';">
             <div class="card-body">
@@ -219,6 +225,7 @@
 
         {% endfor %}
         {{ pagination.links }}
+
     </div>
 </div>
 </div>
