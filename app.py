@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import pymysql
+from flask_bcrypt import Bcrypt 
 
 
 app = Flask(__name__)
 db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='Wjstnqls90!', charset='utf8')
-
+Bcrypt = Bcrypt(app)
 @app.route('/')
 def main():
     if "user_id" in session:
         print(session["user_id"])
-        return render_template("main.html", username = session.get("user_id"))
+        return render_template("main.html", username = session.get("user_id"))   
     else:
         return render_template('login.html')
 
@@ -28,39 +29,83 @@ def register():
     
     user_id = request.form["user_id"]
     user_pw = request.form["user_pw"]
-    user_pw = request.form["name"]
+    name = request.form["name"]
 
-    cursor.execute("INSERT INTO users (user_id, user_pw) VALUES(%s,%s)", (user_id, user_pw,))
+    cursor.execute("INSERT INTO users (user_id, user_pw,name) VALUES(%s,%s,%s)", (user_id, 
+    Bcrypt.generate_password_hash(user_pw), name))
 
     db.commit()
     db.close()
 
-    return redirect(url_for("main"))
 
-
-@app.route('/login', methods=["GET"])
+@app.route('/login', methods=["GET","POST"])
 def login():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='Wjstnqls90!', charset='utf8')
-    user_id = request.args.get("user_id")
-    user_pw = request.args.get("user_pw")
-
     cursor = db.cursor()
-    if cursor.execute("SELECT * FROM users WHERE user_id=%s", (user_id)):
-        rows = cursor.fetchone()
-        print(rows)
-        print(rows[2])
-        db.close()
+    cursor.execute("USE newsfeed;")
+    cursor.execute('select * from users;')
+    
+    if request.method == "POST":
+        user_id = request.form['user_id']
+        password1 = request.form['user_pw']
+        cursor = db.cursor()
+        result = cursor.execute("SELECT * FROM users WHERE user_id=%s", [user_id])
+        
+        if result >0:
+            user = cursor.fetchone()
+            password = user["user_pw"]
+            if Bcrypt.check_password_hash(password,password1):
+                session['login'] =True
+                session['user_id'] = user['user_id']
+                session['user_pw'] = user['user_pw']
+            
+                return redirect(url_for("main")) 
+            else:
+                return redirect(url_for("login"))   
+    db.close()
+            
+                
+                
+    return redirect('/login.html')
+            
+           
+        
+# @app.route('/login', methods=["GET"])
+# def login():
+#     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='Wjstnqls90!', charset='utf8')
+#     user_id = request.args.get("user_id")
+#     user_pw1 = request.args.get("user_pw")
 
-        if user_pw == rows[3]:
-            print("3")
-            session['user_id'] = rows[2]
-            print(session['user_id'])
-            return redirect(url_for("main")) #로그인성공 알럿?
-        else:
-            return redirect(url_for("main")) #비밀번호 다름
-    else:
-        db.close()
-        return redirect(url_for("main")) #없는 아이디
+#     cursor = db.cursor()
+#     result = cursor.execute("SELECT * FROM users WHERE user_id=%s", [user_id])
+    
+#     if result >0:
+#         user = cursor.fetchone()
+#         password = user["user_pw"]
+#         if Bcrypt.check_password_hash(password,user_pw1).encode('utf-8'):
+#             session['login'] =True
+#             session['user_id'] = user['user_id']
+#             session['user_pw'] = user['user_pw']
+#             flash("로그인성공")
+#             return redirect("main")
+#         db.close()
+             
+    
+    # if cursor.execute("SELECT * FROM users WHERE user_id=%s", (user_id)):
+    #     rows = cursor.fetchone()
+    #     print(rows)
+    #     print(rows[2])
+    #     db.close()
+
+    #     if user_pw == rows[3]:
+    #         session['user_id'] = rows[2]
+            
+    #         return redirect(url_for("main")) #로그인성공 알럿?
+    #     else:
+    #         return redirect(url_for("main")) #비밀번호 다름
+    # else:
+    #     db.close()
+    #     return redirect(url_for("main")) #없는 아이디
 
 @app.route('/logout')
 def logout():
