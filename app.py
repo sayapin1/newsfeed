@@ -3,7 +3,11 @@ from datetime import timedelta
 from flask_paginate import Pagination, get_page_args
 
 import pymysql
-from flask_bcrypt import Bcrypt 
+from flask_bcrypt import Bcrypt
+
+from datetime import datetime
+import os
+
 
 app = Flask(__name__)
 
@@ -72,9 +76,6 @@ def login():
                 return redirect(url_for("main")) 
             
     db.close()
-            
-                
-                
     return redirect(url_for("main"))
             
            
@@ -89,9 +90,16 @@ def logout():
 def profile_up():
     print("1")
     if request.method == "GET":
-        return render_template('profile_up.html')
+        db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM users WHERE user_id=%s", (session["user_id"]))
+        rows = cursor.fetchone()
+        print(rows)
+        db.commit()
+        db.close()
+        return render_template('profile_up.html', rows=rows)
     else:
-        print("2")
         db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
         cursor = db.cursor()
@@ -99,17 +107,29 @@ def profile_up():
 
         name = request.form['name']
         intro = request.form['intro']
-        picture = request.form['picture']
+        file = request.files['picture']
+
+        if not os.path.isdir("static/upload/image"):
+            os.makedirs('static/upload/image')  # upload/image 폴더 없을 경우 자동생성
+
+        extension = file.filename.split('.')[-1]  # .스플릿으로 파일 확장자 가져오기
+        today = datetime.now()
+        mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+        filename = f'{mtime}.{extension}'
+        print(filename)
+        save_to = f'static/upload/image/{filename}'
+        file.save(save_to)
+
 
         cursor.execute("SELECT * FROM users WHERE user_id=%s", (session["user_id"]))
 
-        sql ="""UPDATE newsfeed.users t SET t.name = '%s', t.intro = '%s', t.picture = '%s' WHERE t.user_id = '%s'""" %(name, intro, picture, session["user_id"])
+        sql ="""UPDATE newsfeed.users t SET t.name = '%s', t.intro = '%s', t.picture = '%s' WHERE t.user_id = '%s'""" %(name, intro, filename, session["user_id"])
         cursor.execute(sql)
         cursor.fetchall()
         db.commit()
         db.close()
         print("3")
-        return redirect(url_for("profile"))
+        return redirect(url_for("myprofile"))
 
 
 @app.route("/profile/<user_id>")
@@ -136,13 +156,12 @@ def profile(user_id):
     rows = cursor.fetchone()
     print(rows)
     db.close()
-
+    session["image"] = rows[4]
     return render_template('profile.html', rows=rows, check=check)
 
 @app.route("/myprofile")
 def myprofile():
     num = session["user_id"]
-
 
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
@@ -152,7 +171,8 @@ def myprofile():
     rows = cursor.fetchone()
     print(rows)
     db.close()
-
+    session["image"] = rows[4]
+    print(session["image"])
     return render_template('profile.html', rows=rows, check=True)
 
 
