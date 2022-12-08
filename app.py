@@ -132,7 +132,14 @@ def myprofile():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     cursor = db.cursor()
 
+<<<<<<< Updated upstream
     cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
+=======
+    cursor.execute("select * from users where user_id = %s", (num))
+    picture = cursor.fetchone()
+    print(picture)
+    
+>>>>>>> Stashed changes
 
     rows = cursor.fetchone()
     print(rows)
@@ -140,11 +147,19 @@ def myprofile():
 
     return render_template('profile.html', rows=rows, check=True)
 
+<<<<<<< Updated upstream
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     curs = db.cursor()
+=======
+    rows = cursor.fetchall()
+    print(rows)
+    session["image"] = rows[0][4]
+    print(session["image"])
+    pagination = Pagination(page=page, per_page=per_page, total=all_count)
+>>>>>>> Stashed changes
 
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
     from post p inner join category c on p.category_name = c.category_name 
