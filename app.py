@@ -37,7 +37,6 @@ def register():
     user_pw = request.form["user_pw"]
     name = request.form["name"]
 
-
     cursor.execute("INSERT INTO users (user_id, user_pw,name) VALUES(%s,%s,%s)", (user_id, 
     Bcrypt.generate_password_hash(user_pw), name))
 
@@ -114,6 +113,8 @@ def profile_up():
 
 @app.route("/profile/<user_id>")
 def profile(user_id):
+    per_page = 6
+    page, _, offset = get_page_args(per_page=per_page)
     print(user_id)
     if user_id:
         num = user_id
@@ -127,33 +128,48 @@ def profile(user_id):
         num = session["user_id"]
         check = True
     print(check)
+    print(num)
 
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
 
-    cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
+    cursor.execute("SELECT COUNT(*) FROM post;")
+    all_count = cursor.fetchall()[0][0]
 
-    rows = cursor.fetchone()
+    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, p.id, p.title, p.created_at
+    from users u inner join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""", (num, per_page, offset))
+
+    rows = cursor.fetchall()
     print(rows)
     db.close()
 
-    return render_template('profile.html', rows=rows, check=check)
+    pagination = Pagination(page=page, per_page=per_page, total=all_count)
+
+    return render_template('profile.html', rows=rows, check=check, pagination=pagination)
 
 @app.route("/myprofile")
 def myprofile():
     num = session["user_id"]
-
+    per_page = 6
+    page, _, offset = get_page_args(per_page=per_page)
 
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
 
-    cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
+    cursor.execute("SELECT COUNT(*) FROM post;")
+    all_count = cursor.fetchall()[0][0]
 
-    rows = cursor.fetchone()
+    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, p.id, p.title, p.created_at
+        from users u inner join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""",
+                   (num, per_page, offset))
+
+    rows = cursor.fetchall()
     print(rows)
     db.close()
 
-    return render_template('profile.html', rows=rows, check=True)
+    pagination = Pagination(page=page, per_page=per_page, total=all_count)
+
+    return render_template('profile.html', rows=rows, check=True, pagination=pagination)
 
 
 @app.route("/post", methods=["GET"])
@@ -173,7 +189,7 @@ def get_all_post():
 
     curs.execute(sql)
     post_list = curs.fetchall()
-    print(post_list)
+
     db.close()
 
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
@@ -213,15 +229,15 @@ def get_all_post():
 #     return jsonify({"posts": doc})
 
 
-@app.route("/post/<id>", methods=["GET"])
-def show_post(id):
+@app.route("/post/<user_id>/<id>", methods=["GET"])
+def show_post(user_id, id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
         from post p inner join category c on p.category_name = c.category_name 
         inner JOIN users u ON p.user_id = u.user_id
-        where p.id=%s""" % (id)
+        where u.user_id='%s' and p.id = %s""" % (user_id, id)
 
     curs.execute(sql)
     post = curs.fetchall()

@@ -18,8 +18,16 @@
         display: flex;
         flex-direction: row;
         align-items: flex-start;
+<<<<<<< Updated upstream
         justify-content: center;
         margin: 20px;
+=======
+        justify-content: space-evenly;
+        margin: 50px auto;
+        width: 80%;
+
+
+>>>>>>> Stashed changes
     }
 
     .wrap2 {
@@ -122,6 +130,21 @@
         justify-content: flex-end;
     }
 
+<<<<<<< Updated upstream
+=======
+    .wrap_info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pagination {
+        padding: .6em;
+        position: center;
+        font-size: 18px;
+    }
+
+>>>>>>> Stashed changes
 
 </style>
 <body>
@@ -169,14 +192,24 @@
     {% if check == True %}
     <button onclick="location.href='/profile/up'">프로필작성/수정</button>
     {% endif %}
+<<<<<<< Updated upstream
     <div class="myphoto">
         ddd
     </div>
     <div class="name">
         {{rows[1]}}
+=======
+    <div class="wrap_info">
+        <div class="myphoto">
+            ddd
+        </div>
+        <div class="name">
+            {{rows[0][0]}}
+        </div>
+>>>>>>> Stashed changes
     </div>
     <div class="information">
-        {{rows[5]}}
+        {{rows[0][4]}}
     </div>
 </div>
 <div class="category">Category<br>
@@ -194,26 +227,13 @@
     <div id="profile" class="profilewrap">
     </div>
     <div class="contentslist">
-        <div class="card" onclick="location.href='#';">
+        {% for i in rows %}
+        <div class="card" onclick="location.href='/post/{{i[1]}}/{{i[4]}}';">
             <div class="card-body">
-                This is some text within a card body.
+                {{i[5]}}
             </div>
         </div>
-        <div class="card">
-            <div class="card-body" onclick="location.href='#';">
-                This is some text within a card body.
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body" onclick="location.href='#';">
-                This is some text within a card body.
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body" onclick="location.href='#';">
-                This is some text within a card body.
-            </div>
-        </div>
+<<<<<<< Updated upstream
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item">
@@ -231,6 +251,10 @@
                 </li>
             </ul>
         </nav>
+=======
+        {% endfor %}
+        {{ pagination.links }}
+>>>>>>> Stashed changes
     </div>
 </div>
 </div>
