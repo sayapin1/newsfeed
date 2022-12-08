@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-import pymysql
+from datetime import timedelta
 
+import pymysql
 
 app = Flask(__name__)
 
@@ -9,9 +10,10 @@ app = Flask(__name__)
 def main():
     if "user_id" in session:
         print(session["user_id"])
-        return render_template("main.html", username = session.get("user_id"))
+        return render_template("main.html", username=session.get("user_id"))
     else:
         return render_template('login.html')
+
 
 @app.route('/register')
 def join():
@@ -54,12 +56,13 @@ def login():
             print("3")
             session['user_id'] = rows[2]
             print(session['user_id'])
-            return redirect(url_for("main")) #로그인성공 알럿?
+            return redirect(url_for("main"))  # 로그인성공 알럿?
         else:
-            return redirect(url_for("main")) #비밀번호 다름
+            return redirect(url_for("main"))  # 비밀번호 다름
     else:
         db.close()
-        return redirect(url_for("main")) #없는 아이디
+        return redirect(url_for("main"))  # 없는 아이디
+
 
 @app.route('/logout')
 def logout():
@@ -67,63 +70,83 @@ def logout():
     return redirect(url_for("main"))
 
 
-@app.route('/user', methods=['POST'])
-def insert_user():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+@app.route('/profile/up', methods=["GET", "POST"])
+def profile_up():
+    print("1")
+    if request.method == "GET":
+        return render_template('profile_up.html')
+    else:
+        print("2")
+        db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
+        cursor = db.cursor()
+        cursor.execute('select * from users;')
+
+        name = request.form['name']
+        intro = request.form['intro']
+        picture = request.form['picture']
+
+        cursor.execute("SELECT * FROM users WHERE user_id=%s", (session["user_id"]))
+
+        sql ="""UPDATE newsfeed.users t SET t.name = '%s', t.intro = '%s', t.picture = '%s' WHERE t.user_id = '%s'""" %(name, intro, picture, session["user_id"])
+        cursor.execute(sql)
+        cursor.fetchall()
+        db.commit()
+        db.close()
+        print("3")
+        return redirect(url_for("profile"))
+
+
+@app.route("/profile/<user_id>")
+def profile(user_id):
+    print(user_id)
+    if user_id:
+        num = user_id
+        owner = user_id
+        ses = session["user_id"]
+        if owner == ses:
+            check = True
+        else:
+            check = False
+    else:
+        num = session["user_id"]
+        check = True
+    print(check)
+
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
 
-    cursor.execute("USE newsfeed;")
+    cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
 
-    cursor.execute('select * from users;')
-
-
-    name = request.form['name_give']
-    intro = request.form['intro_give']
-    picture = request.form['picture_give']
-
-
-    sql = """insert into users (name, intro, picture)
-         values (%s,%s,%s)
-        """
-    cursor.execute(sql, (name, intro, picture))
-
-    db.commit()
-    db.close()
-    return 'insert success', 200
-
-@app.route('/mypage/<id>', methods=['GET'])
-def show_user(id):
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
-
-    print(id)
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-
-    cursor.execute("USE newsfeed;")
-    cursor.execute('select * from users;')
-
-    sql = f"SELECT * FROM users where id = {id}"
-    f"update post set title "
-    cursor.execute(sql)
-    rows = cursor.fetchall()
+    rows = cursor.fetchone()
     print(rows)
-    mypage = {
-        "name": rows[0]["name"],
-        "intro": rows[0]["intro"]
-        # "picture": rows[0]["picture"]
-    }
-    print(mypage)
-    db.commit()
     db.close()
 
-    return jsonify({"mypage": mypage})
+    return render_template('profile.html', rows=rows, check=check)
+
+@app.route("/myprofile")
+def myprofile():
+    num = session["user_id"]
+
+
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
+
+    rows = cursor.fetchone()
+    print(rows)
+    db.close()
+
+    return render_template('profile.html', rows=rows, check=True)
+
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
 
-    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
+    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id"""
 
@@ -139,14 +162,17 @@ def get_post():
                "content": post[2],
                "created_at": post[3],
                "category": post[4],
-               "name": post[5]}
+               "name": post[5],
+               "user_id": post[6]}
 
         doc.append(pos)
     return jsonify({"posts": doc})
 
+
 @app.route("/category/<id>", methods=["GET"])
 def category(id):
     return render_template('category.html')
+
 
 @app.route("/category/get/<id>", methods=["GET"])
 def get_category(id):
@@ -156,7 +182,7 @@ def get_category(id):
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
     from post p inner join category c on p.category_name = c.category_name 
     inner JOIN users u ON p.user_id = u.user_id
-    where c.id = %s""" %(id)
+    where c.id = %s""" % (id)
 
     curs.execute(sql)
     post_list = curs.fetchall()
@@ -175,15 +201,16 @@ def get_category(id):
         doc.append(pos)
     return jsonify({"posts": doc})
 
+
 @app.route("/post/<id>", methods=["GET"])
 def show_post(id):
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 
     curs = db.cursor()
-    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
+    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
         from post p inner join category c on p.category_name = c.category_name 
         inner JOIN users u ON p.user_id = u.user_id
-        where p.id=%s""" %(id)
+        where p.id=%s""" % (id)
 
     curs.execute(sql)
     post = curs.fetchall()
@@ -210,7 +237,8 @@ def create_post():
         category_name = request.form['cat_name_give']
         print(user_id)
 
-        sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" %(title, content, user_id, category_name)
+        sql = """insert into post values (null, '%s', '%s', default , '%s', '%s')""" % (
+        title, content, user_id, category_name)
         curs.execute(sql)
         curs.fetchall()
         db.commit()
@@ -226,7 +254,7 @@ def post_up(id):
     curs = db.cursor()
     # post_id = request.form['id_give']
     if request.method == "GET":
-        sql = """select p.title, p.content, p.category_name from post p WHERE p.id = %s""" %(id)
+        sql = """select p.title, p.content, p.category_name from post p WHERE p.id = %s""" % (id)
         curs.execute(sql)
         data = curs.fetchall()
         db.close()
@@ -239,7 +267,7 @@ def post_up(id):
         category_name = request.form['cat_name_give']
 
         sql = """UPDATE newsfeed.post t SET t.title = '%s', t.content = '%s', t.category_name = '%s' WHERE t.id = %s""" % (
-        title, content, category_name, id)
+            title, content, category_name, id)
         curs.execute(sql)
         curs.fetchall()
         db.commit()
@@ -264,8 +292,9 @@ def post_del():
     return jsonify({'msg': '삭제완료!'})
 
 
+app.secret_key = 'super secret key'
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=5)
 
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.run(host='127.0.0.1', port=8000, debug=True)
