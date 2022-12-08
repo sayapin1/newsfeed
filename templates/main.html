@@ -171,7 +171,7 @@
             <div class="container" style="background-color: #f5f5f5">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="posts">
                     {% for i in post_list %}
-                    <div class="col imgUp" style="cursor: pointer;" onclick="location.href='post/${s}'">
+                    <div class="col imgUp" style="cursor: pointer;" onclick="location.href='post/{{i[0]}}'">
                         <div class="scale card shadow-sm">
                             <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
                             <div class="card-body">
