@@ -173,15 +173,12 @@ def profile(user_id):
 
     rows = cursor.fetchall()
     print(rows)
+    session["image"] = rows[0][4]
     db.close()
 
-
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
-    session["image"] = rows[0][4]
 
     return render_template('profile.html', rows=rows, check=check, pagination=pagination)
-
-
 
 @app.route("/myprofile")
 def myprofile():
@@ -193,12 +190,6 @@ def myprofile():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
 
-    cursor.execute("select * from users where user_id = %s", (num))
-    picture = cursor.fetchone()
-    print(picture)
-    session["image"] = picture[4]
-    print(session["image"])
-
     cursor.execute("SELECT COUNT(*) FROM post;")
     all_count = cursor.fetchall()[0][0]
     print(all_count)
@@ -209,6 +200,8 @@ def myprofile():
 
     rows = cursor.fetchall()
     print(rows)
+    session["image"] = rows[0][4]
+    print(session["image"])
 
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
 

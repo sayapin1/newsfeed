@@ -29,19 +29,22 @@
     <section class="sec">
         <form enctype = "multipart/form-data" method = "post" id = "login" action= {{url_for("profile_up")}}>
             <div class="int-area">
+                <label for="name">닉네임</label>
                 <input type="name" name="name" value="{{rows[1]}}" id="name"
                 autocomplete="off"required>
-                <label for="name">닉네임</label>
+
             </div>
             <div class="int-area">
-                <input type="text" name="intro" value="{{rows[5]}}" id="intro"
-                autocomplete="off"required>
                 <label for="intro">자기 소개</label>
+                <input type="text" name="intro" value="{{rows[4]}}" id="intro"
+                autocomplete="off"required>
+
             </div>
             <div class="int-area">
-                <input type="file" name="picture" id="picture"
-                autocomplete="off"required>
                 <label for="picture">사진 업로드</label>
+                <input class = "myphoto" type="file" name="picture" id="picture"
+                autocomplete="off"required>
+
             </div>
             <div class="btn-area">
                 <button type="submit" class="login">저장</button>

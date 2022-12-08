@@ -95,7 +95,7 @@
 
     <div class="wrap_info">
         <div class="myphoto">
-            <img id="userimage" src="static/upload/image/{{session['image']}}"/>
+            <img class="myphoto" id="userimage" src="static/upload/image/{{session['image']}}"/>
         </div>
         <div class="name">
             {{rows[0][0]}}
@@ -117,7 +117,7 @@
     <div class="contentslist">
 
         {% for i in rows %}
-        <div class="card" onclick="location.href='/post/{{i[1]}}/{{i[4]}}';">
+        <div class="card" onclick="location.href='/post/{{i[1]}}/{{i[5]}}';">
             <div class="card-body">
                 {{i[6]}}
             </div>
