@@ -1,3 +1,4 @@
+{% extends 'base.html' %} {% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,13 +23,6 @@
         justify-content: center;
     }
 
-    .category {
-        width: 15%;
-
-        border: 2px solid gray;
-        padding: 30px;
-    }
-
     .post {
         border: none;
         padding: 30px;
@@ -46,51 +40,6 @@
         display: flex;
         justify-content: center;
         margin-top: 30px
-    }
-
-    .previouspage {
-        margin-right: auto;
-        border-radius: 10px;
-        border: none
-    }
-
-    .nextpage {
-        margin-left: auto;
-        border-radius: 10px;
-        border: none
-    }
-
-    header ul {
-        padding: 0;
-    }
-
-    header a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .img_smaller {
-        width: 5vh;
-        margin-bottom: 0.1px;
-    }
-
-    .button_radius {
-        border-radius: 5vh;
-    }
-
-    .text-white {
-        background: inherit;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-        overflow: visible;
-        cursor: pointer;
-    }
-
-    .button_flex {
-        display: flex;
-        justify-content: flex-end;
     }
 
     .ontop {
@@ -127,46 +76,7 @@
         })
     }
 </script>
-<header>
-    <div class="collapse bg-dark" id="navbarHeader">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-md-7 py-4"></div>
-                <div class="col-sm-4 offset-md-1 py-4 button_flex">
-                    <button class="text-white">마이페이지</button>
-                    <button class="text-white" style="margin-left:15px">글쓰기</button>
-                    <button class="text-white" style="margin-left:15px">로그아웃</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="/" class="scale navbar-brand d-flex align-items-center">
-                <img
-                        src="https://platum.kr/wp-content/uploads/2019/12/64497335_490811004989301_7459130390851092480_n.png"
-                        style="width: 30px; margin-right: 12px; border-radius: 5px"
-                /><strong>13_log</strong>
-            </a>
-            <button
-                    class="scale button_radius"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarHeader"
-                    aria-controls="navbarHeader"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-            >
-                <div>
-                    <img
-                            class="img_smaller"
-                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    />
-                </div>
-            </button>
-        </div>
-    </div>
-</header>
+
 <div class="wrap3">
 <!--    <div class="category">Category<br>-->
 <!--        <br>-->
@@ -201,4 +111,4 @@
 
 </body>
 </html>
-
+{% endblock %}

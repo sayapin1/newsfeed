@@ -1,3 +1,4 @@
+{% extends 'base.html' %} {% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,17 +19,10 @@
         display: flex;
         flex-direction: row;
         align-items: flex-start;
-<<<<<<< Updated upstream
-        justify-content: center;
-        margin: 20px;
-=======
         justify-content: space-evenly;
         margin: 50px auto;
         width: 80%;
 
-
->>>>>>> Stashed changes
-    }
 
     .wrap2 {
         display: flex;
@@ -130,8 +124,6 @@
         justify-content: flex-end;
     }
 
-<<<<<<< Updated upstream
-=======
     .wrap_info {
         display: flex;
         flex-direction: column;
@@ -144,7 +136,6 @@
         font-size: 18px;
     }
 
->>>>>>> Stashed changes
 
 </style>
 <body>
@@ -192,13 +183,6 @@
     {% if check == True %}
     <button onclick="location.href='/profile/up'">프로필작성/수정</button>
     {% endif %}
-<<<<<<< Updated upstream
-    <div class="myphoto">
-        ddd
-    </div>
-    <div class="name">
-        {{rows[1]}}
-=======
     <div class="wrap_info">
         <div class="myphoto">
             ddd
@@ -206,7 +190,6 @@
         <div class="name">
             {{rows[0][0]}}
         </div>
->>>>>>> Stashed changes
     </div>
     <div class="information">
         {{rows[0][4]}}
@@ -233,30 +216,12 @@
                 {{i[5]}}
             </div>
         </div>
-<<<<<<< Updated upstream
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-=======
+
         {% endfor %}
         {{ pagination.links }}
->>>>>>> Stashed changes
     </div>
 </div>
 </div>
 </body>
 </html>
+{% endblock %}

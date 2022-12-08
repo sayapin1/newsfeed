@@ -71,12 +71,9 @@ def login():
                 return redirect(url_for("main")) 
             
     db.close()
-            
-                
-                
+
     return redirect(url_for("main"))
             
-           
 
 @app.route('/logout')
 def logout():
