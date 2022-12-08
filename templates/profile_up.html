@@ -105,14 +105,14 @@
       </div>
     </header>
     <section class="sec">
-        <form method = "post" id = "login" action= {{url_for("profile_up")}}>
+        <form enctype = "multipart/form-data" method = "post" id = "login" action= {{url_for("profile_up")}}>
             <div class="int-area">
-                <input type="name" name="name" value="name" id="name"
+                <input type="name" name="name" value="{{rows[1]}}" id="name"
                 autocomplete="off"required>
                 <label for="name">닉네임</label>
             </div>
             <div class="int-area">
-                <input type="text" name="intro" value="intro" id="intro"
+                <input type="text" name="intro" value="{{rows[5]}}" id="intro"
                 autocomplete="off"required>
                 <label for="intro">자기 소개</label>
             </div>
