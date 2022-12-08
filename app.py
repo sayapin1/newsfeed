@@ -22,7 +22,7 @@ def join():
 
 @app.route('/register', methods=["post"])
 def register():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     cursor = db.cursor()
     cursor.execute("USE newsfeed;")
     cursor.execute('select * from users;')
@@ -41,7 +41,7 @@ def register():
 
 @app.route('/login', methods=["GET"])
 def login():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     user_id = request.args.get("user_id")
     user_pw = request.args.get("user_pw")
 
@@ -77,7 +77,7 @@ def profile_up():
         return render_template('profile_up.html')
     else:
         print("2")
-        db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+        db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
         cursor = db.cursor()
         cursor.execute('select * from users;')
@@ -113,7 +113,7 @@ def profile(user_id):
         check = True
     print(check)
 
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
@@ -129,7 +129,7 @@ def myprofile():
     num = session["user_id"]
 
 
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users WHERE user_id=%s", (num))
@@ -143,7 +143,7 @@ def myprofile():
 
 @app.route("/post/get", methods=["GET"])
 def get_post():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     curs = db.cursor()
 
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
@@ -176,7 +176,7 @@ def category(id):
 
 @app.route("/category/get/<id>", methods=["GET"])
 def get_category(id):
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
@@ -204,24 +204,38 @@ def get_category(id):
 
 @app.route("/post/<id>", methods=["GET"])
 def show_post(id):
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
     curs = db.cursor()
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
         from post p inner join category c on p.category_name = c.category_name 
         inner JOIN users u ON p.user_id = u.user_id
         where p.id=%s""" % (id)
-
+        
     curs.execute(sql)
     post = curs.fetchall()
+    
+    user_id = post[0][6]
+    
+    if user_id:
+        owner = user_id
+        ses = session["user_id"]
+        if owner == ses:
+            check = True
+        else:
+            check = False
+    else:
+        owner = session["user_id"]
+        check = True
+        
     db.close()
 
-    return render_template('post.html', post=post[0])
+    return render_template('post.html', post=post[0], check = check)
 
 
 @app.route("/post/create", methods=["GET", "POST"])
 def create_post():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
     curs = db.cursor()
 
     if request.method == "GET":
@@ -249,7 +263,7 @@ def create_post():
 
 @app.route("/up/<id>", methods=["GET", "POST"])
 def post_up(id):
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
     curs = db.cursor()
     # post_id = request.form['id_give']
@@ -278,7 +292,7 @@ def post_up(id):
 
 @app.route("/post/del", methods=["Delete"])
 def post_del():
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='ihi!@#156012', charset='utf8')
 
     curs = db.cursor()
     id = request.form['del_give']
