@@ -1,20 +1,21 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from datetime import timedelta
+from flask_paginate import Pagination, get_page_args
 
 import pymysql
 from flask_bcrypt import Bcrypt 
 
 app = Flask(__name__)
 
-db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='Wjstnqls90!', charset='utf8')
+db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
 Bcrypt = Bcrypt(app)
 
 @app.route('/')
 def main():
     if "user_id" in session:
         print(session["user_id"])
-
-        return render_template("main.html", username = session.get("user_id"))   
+        return redirect(url_for("get_all_post"))
+        # return render_template("main.html", username = session.get("user_id"))
 
     else:
         return render_template('login.html')
@@ -49,7 +50,7 @@ def register():
 @app.route('/login', methods=["GET","POST"])
 def login():
 
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='Wjstnqls90!', charset='utf8')
+    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
     cursor.execute("USE newsfeed;")
     cursor.execute('select * from users;')
@@ -155,65 +156,61 @@ def myprofile():
     return render_template('profile.html', rows=rows, check=True)
 
 
-@app.route("/post/get", methods=["GET"])
-def get_post():
+@app.route("/post", methods=["GET"])
+def get_all_post():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     curs = db.cursor()
+
+    per_page = 6
+    page, _, offset = get_page_args(per_page=per_page)
+
+    curs.execute("SELECT COUNT(*) FROM post;")
+    all_count = curs.fetchall()[0][0]
 
     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name, u.user_id
-    from post p inner join category c on p.category_name = c.category_name 
-    inner JOIN users u ON p.user_id = u.user_id"""
-
-    curs.execute(sql)
-    post_list = curs.fetchall()
-    db.commit()
-    db.close()
-
-    doc = []
-    for post in post_list:
-        pos = {"number": post[0],
-               "title": post[1],
-               "content": post[2],
-               "created_at": post[3],
-               "category": post[4],
-               "name": post[5],
-               "user_id": post[6]}
-
-        doc.append(pos)
-    return jsonify({"posts": doc})
-
-
-@app.route("/category/<id>", methods=["GET"])
-def category(id):
-    return render_template('category.html')
-
-
-@app.route("/category/get/<id>", methods=["GET"])
-def get_category(id):
-    db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
-
-    curs = db.cursor()
-    sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
-    from post p inner join category c on p.category_name = c.category_name 
-    inner JOIN users u ON p.user_id = u.user_id
-    where c.id = %s""" % (id)
+        from post p inner join category c on p.category_name = c.category_name 
+        inner JOIN users u ON p.user_id = u.user_id ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""" %(per_page, offset)
 
     curs.execute(sql)
     post_list = curs.fetchall()
     print(post_list)
     db.close()
 
-    doc = []
-    for post in post_list:
-        pos = {"number": post[0],
-               "title": post[1],
-               "content": post[2],
-               "created_at": post[3],
-               "category": post[4],
-               "name": post[5]}
+    pagination = Pagination(page=page, per_page=per_page, total=all_count)
 
-        doc.append(pos)
-    return jsonify({"posts": doc})
+    return render_template('main.html', post_list=post_list, pagination=pagination)
+
+# @app.route("/category/<id>", methods=["GET"])
+# def category(id):
+#     return render_template('category.html')
+#
+#
+# @app.route("/category/get/<id>", methods=["GET"])
+# def get_category(id):
+#     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
+#
+#     curs = db.cursor()
+#     sql = """select p.id, p.title, p.content, p.created_at, c.category_name, u.name
+#     from post p inner join category c on p.category_name = c.category_name
+#     inner JOIN users u ON p.user_id = u.user_id
+#     where c.id = %s""" % (id)
+#
+#     curs.execute(sql)
+#     post_list = curs.fetchall()
+#     print(post_list)
+#     db.close()
+#
+#     doc = []
+#     for post in post_list:
+#         pos = {"number": post[0],
+#                "title": post[1],
+#                "content": post[2],
+#                "created_at": post[3],
+#                "category": post[4],
+#                "name": post[5]}
+#
+#         doc.append(pos)
+#     return jsonify({"posts": doc})
 
 
 @app.route("/post/<id>", methods=["GET"])
