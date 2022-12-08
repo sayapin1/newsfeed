@@ -65,7 +65,7 @@ def login():
             user = cursor.fetchone()
             password = user[3]   
            
-            if Bcrypt.check_password_hash(password,password1):
+            if Bcrypt.check_password_hash(password,password1): #비번 암호화 전에 생성한 비번으로 로그인시 salt오류 발생
                 # session['login'] =True
                 session['user_id'] = user[2]
                 session['user_pw'] = user[3]
