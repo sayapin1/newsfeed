@@ -168,8 +168,8 @@ def profile(user_id):
     cursor.execute("SELECT COUNT(*) FROM post;")
     all_count = cursor.fetchall()[0][0]
 
-    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, p.id, p.title, p.created_at
-    from users u inner join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""", (num, per_page, offset))
+    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, u.picture, p.id, p.title, p.created_at
+    from users u left join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""", (num, per_page, offset))
 
     rows = cursor.fetchall()
     print(rows)
@@ -177,7 +177,7 @@ def profile(user_id):
 
 
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
-    session["image"] = rows[4]
+    session["image"] = rows[0][4]
 
     return render_template('profile.html', rows=rows, check=check, pagination=pagination)
 
@@ -193,21 +193,24 @@ def myprofile():
     db = pymysql.connect(host='localhost', user='root', db='newsfeed', password='spartapw', charset='utf8')
     cursor = db.cursor()
 
+    cursor.execute("select * from users where user_id = %s", (num))
+    picture = cursor.fetchone()
+    print(picture)
+    session["image"] = picture[4]
+    print(session["image"])
+
     cursor.execute("SELECT COUNT(*) FROM post;")
     all_count = cursor.fetchall()[0][0]
+    print(all_count)
 
-    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, p.id, p.title, p.created_at
-        from users u inner join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""",
+    cursor.execute("""select u.name, u.user_id, u.user_pw, u.intro, u.picture, p.id, p.title, p.created_at
+        from users u left join post p on p.user_id = u.user_id where u.user_id = %s ORDER BY 'created_at' DESC LIMIT %s OFFSET %s""",
                    (num, per_page, offset))
 
     rows = cursor.fetchall()
     print(rows)
-    db.close()
 
     pagination = Pagination(page=page, per_page=per_page, total=all_count)
-
-    session["image"] = rows[4]
-    print(session["image"])
 
     return render_template('profile.html', rows=rows, check=True, pagination=pagination)
 

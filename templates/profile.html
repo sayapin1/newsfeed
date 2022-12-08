@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %} {% block content %}
 
 <!DOCTYPE html>
@@ -36,25 +35,6 @@
 
     }
 
-    .profilewrap {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: center;
-
-        border: 2px solid gray;
-        padding: 30px;
-
-        width: 900px;
-    }
-
-    .category {
-        width: 15%;
-
-        border: 2px solid gray;
-        padding: 30px;
-    }
-
     .myphoto {
         background-color: lightpink;
         width: 200px;
@@ -69,11 +49,11 @@
 
         width: 70%;
 
-        border: 2px solid gray;
+
     }
 
     .contentslist {
-        border: 2px solid gray;
+
         width: 100%;
         padding: 30px;
 
@@ -93,38 +73,6 @@
         background-color: #eee;
     }
 
-    header ul {
-        padding: 0;
-    }
-
-    header a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .img_smaller {
-        width: 5vh;
-        margin-bottom: 0.1px;
-    }
-
-    .button_radius {
-        border-radius: 5vh;
-    }
-
-    button {
-        background: inherit;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-        overflow: visible;
-        cursor: pointer;
-    }
-
-    .button_flex {
-        display: flex;
-        justify-content: flex-end;
-    }
 
     .wrap_info {
         display: flex;
@@ -139,53 +87,10 @@
     }
 
 
-
 </style>
 <body>
-<header>
-    <div class="collapse bg-dark" id="navbarHeader">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-md-7 py-4"></div>
-                <div class="col-sm-4 offset-md-1 py-4 button_flex">
-                    <button class="text-white">마이페이지</button>
-                    <button class="text-white" style="margin-left:15px">글쓰기</button>
-                    <button class="text-white" style="margin-left:15px">로그아웃</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="/" class="scale navbar-brand d-flex align-items-center">
-                <img
-                        src="https://platum.kr/wp-content/uploads/2019/12/64497335_490811004989301_7459130390851092480_n.png"
-                        style="width: 30px; margin-right: 12px; border-radius: 5px"
-                /><strong>13_log</strong>
-            </a>
-            <button
-                    class="scale button_radius"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarHeader"
-                    aria-controls="navbarHeader"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-            >
-                <div>
-                    <img
-                            class="img_smaller"
-                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    />
-                </div>
-            </button>
-        </div>
-    </div>
-</header>
+
 <div class="wrap1">
-    {% if check == True %}
-    <button onclick="location.href='/profile/up'">프로필작성/수정</button>
-    {% endif %}
 
 
     <div class="wrap_info">
@@ -195,33 +100,26 @@
         <div class="name">
             {{rows[0][0]}}
         </div>
+        {% if check == True %}
+        <button onclick="location.href='/profile/up'">프로필작성/수정</button>
+        {% endif %}
 
     </div>
     <div class="information">
-        {{rows[0][4]}}
+        {{rows[0][3]}}
 
     </div>
 </div>
-<div class="category">Category<br>
-    <br>
-    <ul class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action">
-            TIL
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">WIL</a>
-        <a href="#" class="list-group-item list-group-item-action">잡담</a>
-    </ul>
-</div>
+
 
 <div class="wrap2">
-    <div id="profile" class="profilewrap">
-    </div>
+
     <div class="contentslist">
 
         {% for i in rows %}
         <div class="card" onclick="location.href='/post/{{i[1]}}/{{i[4]}}';">
             <div class="card-body">
-                {{i[5]}}
+                {{i[6]}}
             </div>
         </div>
 
