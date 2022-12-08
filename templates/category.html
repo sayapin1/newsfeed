@@ -1,0 +1,240 @@
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+
+    <title>13_log</title>
+
+    <style>
+        section > #student {
+            background-color: black;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        header ul {
+            padding: 0;
+        }
+
+        header a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .img_smaller {
+            width: 5vh;
+            margin-bottom: 0.1px;
+        }
+
+        .button_radius {
+            border-radius: 5vh;
+        }
+
+        button {
+            background: inherit;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            overflow: visible;
+            cursor: pointer;
+        }
+
+        .button_flex {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .col {
+
+            transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+        }
+
+        .word {
+            display: -webkit-box;
+            word-wrap: break-word;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 150px;
+        }
+
+        .imgUp:hover {
+            padding-bottom: 0px;
+            transform: translate(0, -9px);
+        }
+
+        .wrap {
+            display: flex
+        }
+
+        .category {
+            width: 15%;
+
+            border: 2px solid gray;
+            padding: 30px;
+        }
+
+        .posts {
+            display: flex;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            show_post();
+        });
+
+        function show_post() {
+            $.ajax({
+                type: "GET",
+                url: "category/get/${id}",
+                data: {},
+                success: function (response) {
+                    let rows = response['posts']
+                    for (let i = 0; i < rows.length; i++) {
+                        let s = rows[i]['number'];
+
+                        let title = rows[i]['title'];
+                        let content = rows[i]['content'];
+                        let created_at = rows[i]['created_at'];
+                        let category = rows[i]['category'];
+                        let name = rows[i]['name'];
+
+                        let temp_html = `<div class="col imgUp">
+                                        <div class="scale card shadow-sm">
+                                            <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 250px; width: 350px; border: 1px solid black;background-size: cover;"></div>
+                                             <div class="card-body" style="height: 200px; width: 350px">
+                                                <p class="card-text">
+                                                <h3>${title}</h3><h6>${category}</h6></p>
+                                                <p class="card-text"><h5 class="word"><i>${content}</i></h5></p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="btn-group">
+                                                        <a href="/member/CSH">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='post/${s}'">보기</button>
+                                                        </a>
+                                                    </div>
+                                                    <small class="text-muted">${name}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+
+                        $('#posts').append(temp_html);
+                    }
+                }
+            })
+        }
+
+
+    </script>
+<body>
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4"></div>
+                <div class="col-sm-4 offset-md-1 py-4 button_flex">
+                    <button class="text-white">마이페이지</button>
+                    <button class="text-white" style="margin-left:15px">글쓰기</button>
+                    <button class="text-white" style="margin-left:15px">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="/" class="scale navbar-brand d-flex align-items-center">
+                <img
+                        src="https://platum.kr/wp-content/uploads/2019/12/64497335_490811004989301_7459130390851092480_n.png"
+                        style="width: 30px; margin-right: 12px; border-radius: 5px"
+                /><strong>13_log</strong>
+            </a>
+            <button
+                    class="scale button_radius"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <div>
+                    <img
+                            class="img_smaller"
+                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                    />
+                </div>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="wrap">
+    <div class="category">Category<br>
+        <br>
+        <ul class="list-group list-group-flush">
+            <a href="category/1" class="list-group-item list-group-item-action">TIL</a>
+            <a href="category/2" class="list-group-item list-group-item-action">WIL</a>
+            <a href="category/3" class="list-group-item list-group-item-action">잡담</a>
+        </ul>
+    </div>
+    <div class="posts" id="posts">
+        <div class="col imgUp">
+            <div class="scale card shadow-sm">
+                <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 250px; width: 350px; border: 1px solid black;background-size: cover;"></div>
+                <div class="card-body" style="height: 200px; width: 350px">
+                    <p class="card-text">
+                    <h3>제목</h3><h6>카테고리?</h6></p>
+                    <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a href="/member/CSH">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
+                            </a>
+                        </div>
+                        <small class="text-muted">test_id1</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col imgUp">
+            <div class="scale card shadow-sm">
+                <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 250px; width: 350px; border: 1px solid black;background-size: cover;"></div>
+                <div class="card-body" style="height: 200px; width: 350px">
+                    <p class="card-text">
+                    <h3>제목</h3><h6>카테고리?</h6></p>
+                    <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a href="post/${s}">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
+                            </a>
+                        </div>
+                        <small class="text-muted">test_id1</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

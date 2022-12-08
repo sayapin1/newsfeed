@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13_LOG Creat</title>
-    <link rel="stylesheet" href="static\Login_Style.css">
-    <script src="../놀이터/jquery-1.12.4.js"> </script>
+    <link rel="stylesheet" href="../static/Login_Styles.css">
+    <script src="../static/jquery-1.12.4.js"> </script>
     
 </head>
 <body>
     <section class="login-form">
-        <h1><a href="">13_LOG </a></h1>
+        <h1><a href=""><img src="../static/logo.png"></a></h1>
         <form action="">
             <div class="int-area">
                 <input type="email" name="signupEmail" id="signupEmail"
@@ -61,6 +61,8 @@
                 const auth = getAuth();
                 createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
+                    alert("가입이 완료되었습니다 로그인 하세요 ")
+                    location.href="../templates/login.html"
                     console.log(userCredential)
                     // Signed in 
                     const user = userCredential.user;
@@ -79,14 +81,14 @@
             
         </script>
         <div class="caption">
-            already have account? <a href=""> Go to Login </a>
+            already have account? <a href="../templates/login.html"> Go to Login </a>
         </div>
         
     </section>
 
     <script>
-        let id = $('#id');
-        let pw = $('#pw');
+        let id = $('#signupEmail');
+        let pw = $('#signupPw');
         let btn = $('#btn');
 
         $(btn).on('click', function() {

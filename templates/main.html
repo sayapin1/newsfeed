@@ -12,7 +12,8 @@
       crossorigin="anonymous"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"></script>
     <title>13_log</title>
 
     <style>
@@ -66,19 +67,57 @@
     </style>
   </head>
   <body>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
+    <script>
+      $(document).ready(function () {
+        show_post();
+    });
+
+      function show_post() {
+        $.ajax({
+            type: "GET",
+            url: "/post/get",
+            data: {},
+            success: function (response) {
+                let rows = response['posts']
+                for (let i = 0; i < rows.length; i++) {
+
+                    let s = rows[i]['number'];
+
+                    let title = rows[i]['title'];
+                    let content = rows[i]['content'];
+                    let created_at = rows[i]['created_at'];
+                    let category = rows[i]['category'];
+                    let name = rows[i]['name'];
+
+                    let temp_html = `<div class="col imgUp" style="cursor: pointer;" onclick="location.href='post/${s}'">
+                                        <div class="scale card shadow-sm">
+                                            <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
+                                             <div class="card-body">
+                                                <p class="card-text"><h3>${title}</h3><h6>${category}</h6></p>
+                                                <p class="card-text"><h5 class="word"><i>${content}</i></h5></p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="text-muted">${created_at}</h6>
+                                                    <h6>${name}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+                    $('#posts').append(temp_html);
+
+                }
+            }
+        })
+    }
+    </script>
     <header>
       <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
           <div class="row">
             <div class="col-sm-8 col-md-7 py-4"></div>
             <div class="col-sm-4 offset-md-1 py-4 button_flex">
-              <button class="text-white">마이페이지</button>
-              <button class="text-white" style="margin-left:15px">글쓰기</button>
-              <button class="text-white" style="margin-left:15px">로그아웃</button>
+              <button class="text-white" onclick="location.href='/myprofile' ">마이페이지</button>
+              <button class="text-white" style="margin-left:15px" onclick="location.href='post/create'">글쓰기</button>
+              <button class="text-white" style="margin-left:15px" onclick="location.href='/logout'">로그아웃</button>
             </div>
           </div>
         </div>
@@ -114,145 +153,8 @@
       <section id="student">
         <div class="album py-5 bg-light">
           <div class="container" style="background-color: #f5f5f5">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://blog.kakaocdn.net/dn/bZ0Jlo/btrmXvMjTNg/fRk9PzJpOox2KhrK3bpoNk/img.png); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/CSH">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                      <small class="text-muted">test_id1</small>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class=" card shadow-sm">
-                  <div style="background-image: url(https://www.venturesquare.net/wp-content/uploads/2019/12/2019_1224_CODING.jpg); height: 300px; width: 415px; border: 1px solid black;background-size: cover;">
-                  </div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/KSI">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                        <small class="text-muted">test_id2</small>
-                     </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://res.cloudinary.com/linkareer/image/fetch/f_auto/https://api.linkareer.com/attachments/52636); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                  <div class="card-body">
-                    <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                    <p class="card-text"><h5 class="word"><i>아무 내용 아주 긴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~내용</i></h5></p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <a href="/member/CSH">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                        </a>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="posts">
 
-                      </div>
-                      <small class="text-muted">test_id3</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://blog.kakaocdn.net/dn/cBeJdY/btqJ4G4VfV2/wyYwWNMQsrR4OrpyGsmyK0/img.png); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/KBS">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                        <small class="text-muted">test_id4</small>
-                     </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://pbs.twimg.com/media/E_Xt5WrVEAAJS_Q?format=jpg&name=large); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/CSH">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                      <small class="text-muted">test_id5</small>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://s3.ap-northeast-2.amazonaws.com/blog.spartacodingclub.kr/1655106626116-nb_og%20image.jpg); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/CSH">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                      <small class="text-muted">test_id6</small>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://s3.ap-northeast-2.amazonaws.com/blog.spartacodingclub.kr/1655106626116-nb_og%20image.jpg); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/CSH">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                      <small class="text-muted">test_id1</small>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col imgUp">
-                <div class="scale card shadow-sm">
-                  <div style="background-image: url(https://s3.ap-northeast-2.amazonaws.com/blog.spartacodingclub.kr/1655106626116-nb_og%20image.jpg); height: 300px; width: 415px; border: 1px solid black;background-size: cover;"></div>
-                    <div class="card-body">
-                      <p class="card-text"><h3>제목</h3><h6>카테고리?</h6></p>
-                      <p class="card-text"><h5 class="word"><i>아무 내용</i></h5></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a href="/member/CSH">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
-                          </a>
-                        </div>
-                      <small class="text-muted">test_id4</small>
-                      </div>
-                    </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

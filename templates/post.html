@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+    <title>Title</title>
+</head>
+
+<style>
+    .wrap3 {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .category {
+        width: 15%;
+
+        border: 2px solid gray;
+        padding: 30px;
+    }
+
+    .post {
+        border: none;
+        padding: 30px;
+
+        width: 900px;
+    }
+
+    .showcontent {
+        border: 2px solid #d2d2d2;
+        padding: 30px;
+        height: 400px;
+    }
+
+    .buttonplace {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px
+    }
+
+    .previouspage {
+        margin-right: auto;
+        border-radius: 10px;
+        border: none
+    }
+
+    .nextpage {
+        margin-left: auto;
+        border-radius: 10px;
+        border: none
+    }
+
+    header ul {
+        padding: 0;
+    }
+
+    header a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .img_smaller {
+        width: 5vh;
+        margin-bottom: 0.1px;
+    }
+
+    .button_radius {
+        border-radius: 5vh;
+    }
+
+    .text-white {
+        background: inherit;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        overflow: visible;
+        cursor: pointer;
+    }
+
+    .button_flex {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .ontop {
+        display: flex;
+    }
+
+    .post_info {
+        display: flex;
+    }
+
+    .col-sm-4 {
+        background: inherit;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        overflow: visible;
+        cursor: pointer;
+    }
+
+</style>
+
+<body>
+<script>
+    function del_post(del) {
+        $.ajax({
+            type: "Delete",
+            url: "/post/del",
+            data: {del_give: del},
+            success: function (response) {
+                alert(response['msg'])
+                window.location.href='/'
+            }
+        })
+    }
+</script>
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4"></div>
+                <div class="col-sm-4 offset-md-1 py-4 button_flex">
+                    <button class="text-white">마이페이지</button>
+                    <button class="text-white" style="margin-left:15px">글쓰기</button>
+                    <button class="text-white" style="margin-left:15px">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="/" class="scale navbar-brand d-flex align-items-center">
+                <img
+                        src="https://platum.kr/wp-content/uploads/2019/12/64497335_490811004989301_7459130390851092480_n.png"
+                        style="width: 30px; margin-right: 12px; border-radius: 5px"
+                /><strong>13_log</strong>
+            </a>
+            <button
+                    class="scale button_radius"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <div>
+                    <img
+                            class="img_smaller"
+                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                    />
+                </div>
+            </button>
+        </div>
+    </div>
+</header>
+<div class="wrap3">
+<!--    <div class="category">Category<br>-->
+<!--        <br>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--            <a href="#" class="list-group-item list-group-item-action">-->
+<!--                TIL-->
+<!--            </a>-->
+<!--            <a href="#" class="list-group-item list-group-item-action">WIL</a>-->
+<!--            <a href="#" class="list-group-item list-group-item-action">잡담</a>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+    <div class="post" id="post">
+        <div class="ontop">
+            <h1>{{post[1]}}</h1>
+            <div style="padding-top: 30px; padding-left: 50px">{{post[4]}}</div>
+        </div>
+        <div class="post_info">
+            <a href="/profile/{{post[6]}}"><h5 style="font-weight: bold">{{post[5]}}</h5></a>
+            <div style="padding-left: 30px">{{post[3]}}</div>
+        </div>
+        <div class="showcontent">{{post[2]}}</div>
+        <div class="buttonplace">
+<!--            <button class="previouspage" onclick="location.href='#';">이전 게시글</button>-->
+            <button style="margin-right: 20px; border-radius: 10px; border: none; padding:10px" onclick="del_post({{post[0]}})">삭제</button>
+            <button style="border-radius: 10px; border: none; padding:10px" onclick="location.href='/up/{{post[0]}}'">수정</button>
+<!--            <button class="nextpage" onclick="location.href='#';">다음 게시글</button>-->
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+
